@@ -1,0 +1,197 @@
+@charset "utf-8";
+
+/* 로그인 */
+
+body {background:url(../../resources/images/contents/login_back.gif) repeat-x left top}
+#wrap {width:800px; margin:0 auto; *zoom:1}
+#wrap:after { content:""; clear:both; display:block}
+#login_wrap {padding-top:70px; position:relative}
+.header {*zoom:1; overflow:hidden}
+.header:after { content:""; clear:both; display:block}
+
+h1 {display:block; float:left; margin-left:10px; *width:463px}
+.header div {float:right; margin-right:7px}
+
+.gnb {float:left; margin-top:7px}
+.gnb li {float:left; background:url(../../resources/images/contents/login_gnbbar.gif) no-repeat right 2px; padding:0 7px; *background:url(../../resources/images/contents/login_gnbbar.gif) no-repeat right 4px}
+.gnb li:last-child{background:none}
+.gnb li.bgnone{background:none}
+.link {float:right}
+.link li{float:left}
+
+.login_cont {background:url(../../resources/images/contents/login_back.jpg) no-repeat; width:800px; height:435px}
+.login_visualimg {width:434px; height:321px; padding:19px 20px 0 15px; float:left}
+.login_text {margin:6px 0 0 11px}
+.login {width:297px; float:left; padding:48px 0 0 0}
+
+.login_input {position:relative; margin-top:17px}
+
+.login_input dl {overflow:hidden; padding-top:5px}
+.login_input dt{clear:both; float:left; width:50px; padding-top:4px; padding-right:10px; text-align:right; *padding-top:2px}
+.login_input dd{float:left; padding-bottom:3px}
+.btn_login {position:absolute; top:-3px; *top:1px; right:5px}
+
+.chk_id{margin-top:4px;*margin-top:2px; margin-left:60px; *margin-left:55px}
+.chk_login{vertical-align:middle;margin:-1px 0 1px}
+.lbl_long{letter-spacing:-1px;cursor:pointer;cursor:hand}
+
+.login_center {background:url(/../../resources/images/contents/login_dotback.gif) repeat-x left top; margin:15px 10px; padding:15px 0 5px 0}
+.login_banner {margin-left:-5px; margin-top:10px; *margin-top:5px}
+.login_text02 {clear:both; position:relative; padding:16px 0 0 40px; *padding:12px 0 0 40px}
+.login_text02 p{margin-top:6px}
+
+/*로그아웃*/
+.login_box {position:relative; margin:17px 11px; border:1px solid #c0d1e4; background:#d8e4f2; padding:5px 2px 5px 5px}
+.login_box {*zoom:1}
+.login_box:after { content:""; clear:both; display:block}
+.login_box span {font-size:11px; color:#4a5b6f; font-weight:bold; letter-spacing:-1px; padding:3px}
+.login_box dl {width:190px; float:left; margin-top:5px}
+.login_box dt {width:60px; font-size:11px; color:#4a5b6f; font-weight:bold; letter-spacing:-1px; float:left}
+.login_box dd {width:130px; color:#2a53c8; font-size:11px; font-weight:bold; float:left}
+
+.footer {position:relateve; height:50px; margin-top:7px}
+.footlogo {background:url(../../resources/images/contents/login_footlogo.gif) no-repeat left top; margin:0 0 0 130px; float:left}
+.footer p {float:left; margin-top:13px; margin-left:10px}
+
+/* CSS Button 추가 Login Logout 상용*/
+.button
+{
+    margin: 1px;
+    text-decoration: none;
+    font: bold 0.85em 'Trebuchet MS',Arial, Helvetica; /*Change the em value to scale the button*/
+    display: inline-block;
+    text-align: center;
+    color: #fff;
+    
+    border: 1px solid #9c9c9c; /* Fallback style */
+    border: 1px solid rgba(0, 0, 0, 0.3);            
+    
+    text-shadow: 0 1px 0 rgba(0,0,0,0.4);
+    
+    box-shadow: 0 0 .05em rgba(0,0,0,0.4);
+    -moz-box-shadow: 0 0 .05em rgba(0,0,0,0.4);
+    -webkit-box-shadow: 0 0 .05em rgba(0,0,0,0.4);
+    
+}
+
+.button, .button span
+{
+    -moz-border-radius: .3em;
+    border-radius: .3em;
+}
+
+.button span
+{
+    color: #fff;
+    border-top: 1px solid #fff; /* Fallback style */
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    display: block;
+    padding: 1.5em 1.7em;
+    
+    /* The background pattern */
+    
+    background-image: -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, rgba(0, 0, 0, 0.05)), color-stop(.25, transparent), to(transparent)),
+                      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, rgba(0, 0, 0, 0.05)), color-stop(.25, transparent), to(transparent)),
+                      -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.75, transparent), color-stop(.75, rgba(0, 0, 0, 0.05))),
+                      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.75, transparent), color-stop(.75, rgba(0, 0, 0, 0.05)));
+    background-image: -moz-linear-gradient(45deg, rgba(0, 0, 0, 0.05) 25%, transparent 25%, transparent),
+                      -moz-linear-gradient(-45deg, rgba(0, 0, 0, 0.05) 25%, transparent 25%, transparent),
+                      -moz-linear-gradient(45deg, transparent 75%, rgba(0, 0, 0, 0.05) 75%),
+                      -moz-linear-gradient(-45deg, transparent 75%, rgba(0, 0, 0, 0.05) 75%);
+
+    /* Pattern settings */
+    
+    -moz-background-size: 3px 3px;
+    -webkit-background-size: 3px 3px;
+    background-size: 3px 3px;            
+}
+
+.button:hover
+{
+    box-shadow: 0 0 .1em rgba(0,0,0,0.4);
+    -moz-box-shadow: 0 0 .1em rgba(0,0,0,0.4);
+    -webkit-box-shadow: 0 0 .1em rgba(0,0,0,0.4);
+}
+
+.button:active
+{
+    /* When pressed, move it down 1px */
+    position: relative;
+    top: 1px;
+}
+
+
+.button-blue { 
+	background: #4477a1;
+    background: -webkit-gradient(linear, left top, left bottom, from(#81a8cb), to(#4477a1) );
+    background: -moz-linear-gradient(-90deg, #81a8cb, #4477a1);
+    filter:  progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#81a8cb', endColorstr='#4477a1');
+}
+.button-blue:hover {
+	background: #81a8cb;
+    background: -webkit-gradient(linear, left top, left bottom, from(#4477a1), to(#81a8cb) );
+    background: -moz-linear-gradient(-90deg, #4477a1, #81a8cb);
+    filter:  progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#4477a1', endColorstr='#81a8cb');
+}
+.button-blue:active {
+	background: #4477a1;
+}
+
+.sbutton
+{
+    margin: 1px;
+    text-decoration: none;
+    font: bold 0.85em 'Trebuchet MS',Arial, Helvetica; /*Change the em value to scale the button*/
+    display: inline-block;
+    text-align: center;
+    color: #fff;
+    
+    border: 1px solid #9c9c9c; /* Fallback style */
+    border: 1px solid rgba(0, 0, 0, 0.3);            
+    
+    text-shadow: 0 1px 0 rgba(0,0,0,0.4);
+    
+    box-shadow: 0 0 .05em rgba(0,0,0,0.4);
+    -moz-box-shadow: 0 0 .05em rgba(0,0,0,0.4);
+    -webkit-box-shadow: 0 0 .05em rgba(0,0,0,0.4);
+    
+}
+
+.button, .button span
+{
+    -moz-border-radius: .3em;
+    border-radius: .3em;
+}
+
+.sbutton span
+{
+    color: #fff;
+    border-top: 1px solid #fff; /* Fallback style */
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    display: block;
+    padding: 0.5em 10.5em;
+    
+    /* The background pattern */
+    
+    background-image: -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, rgba(0, 0, 0, 0.05)), color-stop(.25, transparent), to(transparent)),
+                      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, rgba(0, 0, 0, 0.05)), color-stop(.25, transparent), to(transparent)),
+                      -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.75, transparent), color-stop(.75, rgba(0, 0, 0, 0.05))),
+                      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.75, transparent), color-stop(.75, rgba(0, 0, 0, 0.05)));
+    background-image: -moz-linear-gradient(45deg, rgba(0, 0, 0, 0.05) 25%, transparent 25%, transparent),
+                      -moz-linear-gradient(-45deg, rgba(0, 0, 0, 0.05) 25%, transparent 25%, transparent),
+                      -moz-linear-gradient(45deg, transparent 75%, rgba(0, 0, 0, 0.05) 75%),
+                      -moz-linear-gradient(-45deg, transparent 75%, rgba(0, 0, 0, 0.05) 75%);
+
+    /* Pattern settings */
+    
+    -moz-background-size: 3px 3px;
+    -webkit-background-size: 3px 3px;
+    background-size: 3px 3px;            
+}
+
+.sbutton:hover
+{
+    box-shadow: 0 0 .1em rgba(0,0,0,0.4);
+    -moz-box-shadow: 0 0 .1em rgba(0,0,0,0.4);
+    -webkit-box-shadow: 0 0 .1em rgba(0,0,0,0.4);
+}

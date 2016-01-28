@@ -1,0 +1,25 @@
+#*
+  Update 그리드 헤더 
+*#
+UPDATE WS_PROGRAM_GRID_SET_Z
+SET 
+    HD_TEXT             = $input.headerText, 
+    COLM_TYPE           = $input.columnType, 
+    MAP_ID              = $input.mappingId, 
+    WDTH                = $input.width, 
+    HEI                 = $input.height, 
+    DISP_ORD            = $input.dispOrder, 
+    ALGN                = $input.align, 
+    VISI                = $input.visible, 
+    DVLP                = $input.develop, 
+    LANG                = $input.language, 
+    REMK                = $input.remarks,
+    TYPE_VLUE           = $input.typeValue,
+    USE_YN              = $input.status,
+    MOD_ID              = $input.modId, 
+    MOD_DATE            = TO_CHAR(sysDate, 'YYYYMMDD'), 
+    MOD_TIME            = TO_CHAR(sysDate, 'HH24MISS')  
+WHERE PGM_GRID_SET_ID = $input.programGridSetId 
+  AND PGM_ID = $input.programId 
+  AND USE_YN = 'Y'
+    

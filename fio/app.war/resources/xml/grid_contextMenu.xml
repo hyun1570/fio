@@ -1,0 +1,15 @@
+<?xml version='1.0' ?>
+<menu id="0">
+    <item text="Copy"               img="red.gif"  id="itemCopy"/>
+    <item text="Paste"              img="red.gif"  id="itemPaste"/>
+    <item text="Hide Column"        img="blue.gif" id="hideColumn"/>
+    <item text="Hide Row"           img="blue.gif" id="hideRow"/>
+    <item text="Copy Row"           img="blue.gif" id="copyRow"/>
+    <item text="Group By"           img="blue.gif" id="groupBy"/>
+    <item text="UnGroup By"         img="blue.gif" id="unGroupBy"/>    
+    <item text="Fix Column"         img="blue.gif" id="fixColumn"/>
+    <item text="Cancel Fix Column"  img="blue.gif" id="cancelFixColumn"/>
+    <item text="Data Filter"        img="blue.gif" id="dataFilter"/>
+    <item text="Data UnFilter"      img="blue.gif" id="dataUnFilter"/>
+    <item text="Function"           img="red.gif"  id="userFunction"/>
+</menu>

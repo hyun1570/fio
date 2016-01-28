@@ -1,0 +1,11 @@
+# Dongbu-CNI Framework Evaluation license
+product=StrategyFramework
+version=1.x
+type=Evaluation
+users=10
+cpus=unlimit
+expiration=unlimit
+ip=unlimit
+date=20080101
+etc=
+serial=DBCNI-DAF001-200801-WINTER-MUTE

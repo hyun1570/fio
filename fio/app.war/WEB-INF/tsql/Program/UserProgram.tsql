@@ -1,0 +1,38 @@
+#*
+  사용자 프로그램 목록
+*#
+SELECT
+        PRG.PGM_ID                 As  "programId",
+        MAX(PRG.PGM_PATH)     As  "programPath",
+        MAX(PRG.PGM_NAME)     As  "programName",
+        MAX(PRG.PGM_TYPE)     As  "programType",
+        MAX(PRG.MENU_TYPE)    As  "menuType",
+        MAX(PRG.MENU_ID)        As  "menuId",
+        MAX(
+        (SELECT PGM_NAME
+            FROM WS_PROGRAM_C
+          WHERE MENU_ID =  $input.menuId
+             AND USE_YN ='Y'
+         ))                               As "menuName",
+        MAX(PRG.MENU_PNT_ID)  As "menuPntId",
+        MAX(PRG.MENU_ORD)      As "menuOrd"
+ FROM
+        WS_USER_ROLE_C UR,
+        WS_USER_ROLE_PROGRAM_C URP,
+        WS_SITE_C ST,
+        WS_PROGRAM_C PRG
+WHERE   UR.ROLE_ID   = URP.ROLE_ID 
+    AND UR.ROLE_ID     = URP.ROLE_ID
+    AND PRG.PGM_ID     = URP.PGM_ID
+    AND ST.SITE_ID      = PRG.SITE_ID 
+    AND UR.USER_ID      = $input.userId
+    AND UR.USE_YN = 'Y'
+    AND ST.SITE_CODE   = $input.siteCode
+    AND PRG.USE_YN ='Y'
+#if (!$input.isContain("lang"))
+    AND PGM_LANG = 'KOR'
+#else
+    AND PGM_LANG = $input.lang
+#end
+GROUP BY PRG.PGM_ID     
+ORDER BY MAX(PRG.MENU_ORD)

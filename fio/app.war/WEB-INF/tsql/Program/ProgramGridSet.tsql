@@ -1,0 +1,33 @@
+#*
+  사용자 그리드 헤더 
+*#
+SELECT
+        PRG.PGM_GRID_SET_ID As "programGridSetId", 
+        PRG.PGM_ID          As "programId",
+        PRG.HD_TEXT         As "headerText",
+        PRG.MAP_ID          As "mappingId",
+        PRG.WDTH            As "width",
+        PRG.HEI             As "height",
+        PRG.COLM_TYPE       As "columnType",
+        PRG.VISI            As "visible",
+        PRG.DVLP            As "develop",
+        PRG.ALGN            As "align",
+        PRG.TYPE_VLUE       As "typeValue",
+        PRG.DISP_ORD        As "dispOrder",
+        PRG.LANG            As "language",
+        PRG.REMK            As "remarks",
+        PRG.USE_YN          As "status",
+        PRG.MAX_LEN         As "maxLength"
+FROM
+        WS_PROGRAM_C P,
+        WS_PROGRAM_GRID_SET_Z PRG
+WHERE   1 = 1
+AND     P.PGM_ID = PRG.PGM_ID
+#if ($input.isContain("menuId")) 
+    AND     P.MENU_ID    = $input.menuId
+#end 
+#if ($input.isContain("programId")) 
+    AND     PRG.PGM_ID    = $input.programId
+#end
+AND     PRG.USE_YN = 'Y'
+ORDER BY PRG.DISP_ORD

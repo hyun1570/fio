@@ -1,0 +1,87 @@
+SELECT
+        VSIT_RSVTN_M_ID             As "vsitRsvtnMId",           
+        VSIT_RSVTN_NO               As "vsitRsvtnNo",        
+        BP_CODE                     As "bpCode",
+        FACT_CODE                   As "factCode",
+        DEPT_CODE                   As "deptCode",
+        (SELECT DEPT_NAME                 
+         FROM COMM_DEPT_INFO@COMM_DB
+         WHERE DEPT_CODE = M.DEPT_CODE
+        )                           As "deptName",
+        INTV_USER_ID                As "intvUserId",         
+        (SELECT KNAME
+         FROM COMM_EMP_INFO@COMM_DB
+         WHERE SNO = M.INTV_USER_ID
+        )                           As "intvUserName",
+        INTV_USER_TEL               As "intvUserTel",        
+        INTV_USER_MAIL              As "intvUserMail",       
+        VSIT_CODE                   As "vsitCode", 
+        (SELECT CODE_NAME
+         FROM WS_COMMON_D
+         WHERE MAS_CODE = 'EPUPS'
+         AND CODE = M.VSIT_CODE
+        )                           As "vsitCodeName",
+        TO_CHAR(
+            TO_DATE(VSIT_RSVTN_FROM_DATE, 'yyyyMMdd'), 'yyyy-MM-dd'
+        )                           As "vsitRsvtnFromDate",  
+        TO_CHAR(
+            TO_DATE(VSIT_RSVTN_TO_DATE, 'yyyyMMdd'), 'yyyy-MM-dd'
+        )                           As "vsitRsvtnToDate",  
+        ( 
+            CASE 
+                WHEN VSIT_RSVTN_FROM_DATE = VSIT_RSVTN_TO_DATE 
+                    THEN TO_CHAR(TO_DATE(VSIT_RSVTN_FROM_DATE, 'yyyyMMdd'), 'yyyy-MM-dd')
+                ELSE TO_CHAR(TO_DATE(VSIT_RSVTN_FROM_DATE, 'yyyyMMdd'), 'yyyy-MM-dd') || ' ~ ' || TO_CHAR(TO_DATE(VSIT_RSVTN_TO_DATE, 'yyyyMMdd'), 'yyyy-MM-dd')
+            END  
+        )                           As "vsitRsvtnDate",
+        TO_CHAR(
+            TO_DATE(LPAD(NVL(VSIT_RSVTN_ST_TIME, '0000'), 14, '1'), 'YYYYMMDDHH24MISS'), 'HH24:MI'
+        )                           As "vsitRsvtnStTime",    
+        TO_CHAR(
+            TO_DATE(LPAD(NVL(VSIT_RSVTN_ED_TIME, '0000'), 14, '1'), 'YYYYMMDDHH24MISS'), 'HH24:MI'
+        )                           As "vsitRsvtnEdTime",    
+
+        (CASE
+            WHEN VSIT_RSVTN_ST_TIME = '' OR VSIT_RSVTN_ST_TIME IS NULL THEN ''
+            ELSE
+              TO_CHAR(
+                  TO_DATE(LPAD(NVL(VSIT_RSVTN_ST_TIME, '0000'), 14, '1'), 'YYYYMMDDHH24MISS'), 'HH24:MI'
+              ) || ' ~ ' ||
+              TO_CHAR(
+                  TO_DATE(LPAD(NVL(VSIT_RSVTN_ED_TIME, '0000'), 14, '1'), 'YYYYMMDDHH24MISS'), 'HH24:MI'
+              ) 
+         END                  
+        ) As "vsitRsvtnTime",
+        ETC                         As "etc",                
+        VSIT_PROD_YN                As "vsitProdYn",
+        (
+        CASE
+          WHEN VSIT_PROD_YN = 'Y' THEN '장기'
+          ELSE '당일'
+        END
+        )                           As "visitProdName",       
+        VSIT_GRUP_YN                As "vsitGrupYn",         
+        (
+        CASE
+          WHEN VSIT_GRUP_YN = 'Y' THEN '단체'
+          ELSE '1명'
+        END
+        )                           As "vsitGrupName",   
+        etc                         As "etc",
+        ACCEPT_CODE                 As "acceptCode",    
+        APPR_STATUS                 As "apprStatus",  
+        (
+        CASE
+          WHEN APPR_STATUS = 'A' THEN '승인'
+          WHEN APPR_STATUS = 'R' THEN '반려'    
+          ELSE '미승인'
+        END
+        )                           As "apprStatusName",              
+        APPR_REMARK                 As "apprRemark",         
+        APPR_DATE                   As "apprDate",           
+        APPR_TIME                   As "apprTime",           
+        REG_DATE                    As "regDate",            
+        REG_TIME                    As "regTime"             
+FROM    TA_VSIT_RSVTN_M M
+WHERE   1=1
+AND     VSIT_RSVTN_NO = $input.vsitRsvtnNo

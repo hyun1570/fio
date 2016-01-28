@@ -1,0 +1,5 @@
+## 파일다운 파일삭제
+DELETE
+FROM    WS_FILE_ATTACH_Z
+WHERE   1 = 1
+AND     FILE_ATCH_ID = $input.fileAttachId

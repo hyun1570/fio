@@ -1,0 +1,63 @@
+SELECT
+        SNO             As "sno",
+        KNAME           As "kname",
+        ENAME           As "ename",
+        BUSS_CODE       As "bussCode",
+        NODE_CODE       As "nodeCode",
+        (       
+                SELECT  DNAME
+                FROM    COMM_EMP_CODE_INFO@COMM_DB
+                WHERE   HCODE = 'H016'
+                AND     DCODE = U.NODE_CODE
+        )               As "nodeName",
+        DEPT_CODE       As "deptCode",
+        (
+                SELECT  DEPT_NAME 
+                FROM    COMM_DEPT_INFO@COMM_DB  -- 임시 부서 테이블
+                WHERE   DEPT_CODE = U.DEPT_CODE
+        )               As "deptName",
+        DUTY_RANK       As "dutyRank",
+        (       
+                SELECT  DNAME
+                FROM    COMM_EMP_CODE_INFO@COMM_DB
+                WHERE   HCODE = 'H001'
+                AND     DCODE = U.DUTY_RANK
+        )               As "dutyRankName",
+        DUTY_LEVEL      As "dutyLevel",
+        DUTY_GRD_CD     As "dutyGrdCd",
+        DUTY_STEP       As "dutyStep",
+        HOBONG          As "hobong",
+        EMAIL           As "email",
+        PER_ZIP         As "perZip",
+        PER_ADDR        As "perAddr",
+        PER_ADDR2       As "perAddr2",
+        OFFICE_TEL      As "officeTel",
+        HOME_TEL        As "homeTel",
+        MOBIL_TEL       As "mobilTel",
+        ENTER_DATE      As "enterDate",
+        RETIRE_DATE     As "retireDate",
+        BIRTHDAY        As "birthday",
+        WEDD_DATE       As "weddDate",
+        ECENT_DATE      As "ecentDate",
+        GRPENT_DATE     As "grpentDate",
+        RISE_DATE       As "riseDate",
+        EMP_CLASS       As "empClass",
+        UNION_NM        As "unionNm",
+        UNION_NM        As "unionNm",
+        (
+            SELECT  FACT_CODE
+            FROM    TA_DEPT_MNG_C
+            WHERE   DEPT_CODE = U.DEPT_CODE
+        
+        )               As "factCode",
+        LOC_CODE        As "locCode",
+        TENURE_KIND     As "tenureKind",
+        BANK_NO         As "bankNo",
+        JU_NO           As "juNo",
+        rsvtnNo         As "rsvtnNo"
+FROM    COMM_EMP_INFO@COMM_DB U, -- 임시 사원테이블
+        (SELECT 'E' || TO_CHAR(CURRENT_TIMESTAMP, 'FF2YYMMDDHH24MISS') AS rsvtnNo FROM DUAL) r
+WHERE   U.USE_YN = 'Y'
+#if ($input.fetch("sType") == "userName")
+    AND UPPER(KNAME) = UPPER($input.sTypeNm)
+#end

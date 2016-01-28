@@ -1,0 +1,31 @@
+#*
+  프로그램 목록
+*#
+SELECT 
+    PGM_ID              As "programId", 
+    SITE_ID             As "siteId", 
+    PGM_PNT_ID          As "programParentId", 
+    PGM_TYPE            As "programType", 
+    PGM_NAME            As "programName", 
+    PGM_DESC            As "programDesc", 
+    PGM_PATH            As "programPath", 
+    MENU_ID             As "menuId", 
+    MENU_PNT_ID         As "menuParentId", 
+    MENU_TYPE           As "menuType", 
+    MENU_ORD            As "menuOrder", 
+    MENU_OPT            As "menuOption", 
+    USE_YN              As "status", 
+    REG_ID              As "regId", 
+    REG_DATE            As "regDate", 
+    REG_TIME            As "regTime", 
+    MOD_ID              As "modId", 
+    MOD_DATE            As "modDate", 
+    MOD_TIME            As "modTime"
+FROM 
+    WS_PROGRAM_C
+WHERE  1 = 1
+#if ($input.isContain("siteId"))
+    AND SITE_ID = $input.siteId
+#end
+AND USE_YN = 'Y'
+ORDER BY MENU_ORD

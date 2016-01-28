@@ -1,0 +1,6 @@
+## 출입예약_출입예정일 수정 
+
+ update TA_VSIT_RSVTN_M
+    set VSIT_RSVTN_FROM_DATE= $input.vsitRsvtnFromDate,
+        VSIT_RSVTN_TO_DATE  = $input.vsitRsvtnToDate
+  where VSIT_RSVTN_NO   = $input.vsitRsvtnNo

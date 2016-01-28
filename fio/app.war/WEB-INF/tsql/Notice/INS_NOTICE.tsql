@@ -1,0 +1,52 @@
+## 공지사항 등록
+
+INSERT INTO WS_BOARD_Z
+(BBS_ID,                  -- 게시판ID
+ BBS_TYPE,                -- 게시판유형
+ SITE_CODE,               -- 사이트코드
+ BRAN_CODE,               -- 지점코드
+ NOTI_TYPE,               -- 공지유형
+ LANG_TYPE,               -- 언어설정
+ TOP_VIEW_YN,             -- 상단노출여부
+ TITL,                    -- 제목
+ CTNT,                    -- 내용
+ HIT_CNT,                 -- 조회수
+ EMAL,                    -- 작성자 이메일
+ TEL_NO,                  -- 작성자 전화번호
+ PWD,                     -- 작성 비밀번호
+ RE_REF_BBS_ID,           -- 답변글 참조ID
+ RE_DEPS,                 -- 답변글 깊이
+ RE_ORD,                  -- 답변글 순차번호
+ USE_YN,                  -- 상태(Y:사용, N:미사용)
+ REG_ID,                  -- 등록자ID
+ REG_DATE,                -- 등록일자
+ REG_TIME,                -- 등록시간
+ MOD_ID,                  -- 수정자ID
+ MOD_DATE,                -- 수정일자
+ MOD_TIME                 -- 수정시간
+)
+VALUES
+($input.boardId,
+ $input.boardType,
+ $input.siteCode,
+ $input.branchCode,
+ $input.noticeType,
+ $input.languageType,
+ $input.topViewYn,
+ $input.title,
+ $input.contents,
+ $input.hitCount,
+ $input.eMail,
+ $input.telNo,
+ $input.password,
+ $input.replyRefBoardId,
+ $input.replyDepth,
+ $input.replyOrder,
+ $input.status,
+ $input.regId,
+ TO_CHAR(sysDate, 'YYYYMMDD'),
+ TO_CHAR(sysDate, 'HH24MISS'),
+ $input.modId,
+ TO_CHAR(sysDate, 'YYYYMMDD'),
+ TO_CHAR(sysDate, 'HH24MISS')
+)

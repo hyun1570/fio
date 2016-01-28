@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="$CharSet" ?> 
+<EffectDTO>
+<Summary>
+#set ( $Summary = $XmlUtil.convertToXmlCharWithMTO($Summary) )
+#foreach( $item in $Summary.keySet() )
+<$item>$Summary.get("$item")</$item>
+#end
+</Summary>
+<System>
+#set ( $System = $XmlUtil.convertToXmlCharWithMTO($System) )
+#foreach( $item in $System.keySet() )
+<$item>$System.get("$item")</$item>
+#end
+</System>
+<Master>
+#set ( $Master = $XmlUtil.convertToXmlCharWithMTO($Master) )
+#foreach( $item in $Master.keySet() )
+<$item>$Master.get("$item")</$item>
+#end
+</Master>
+<MtoList>
+#foreach( $item in $MtoSet.keySet() )
+#set ( $Mto = $MtoSet.getObject("$item") )
+#set ( $Mto = $XmlUtil.convertToXmlCharWithMTO($Mto) )
+<$item>
+#foreach( $col in $Mto.keySet() )
+<$col>$Mto.get("$col")</$col>
+#end
+</$item>
+#end
+</MtoList>
+<AtoList>
+#foreach( $item in $AtoSet.keySet() )
+#set ( $Ato = $AtoSet.getObject("$item") )
+#set ( $Ato = $XmlUtil.convertToXmlCharWithATO($Ato) )
+<$item>
+#foreach( $col in $Ato.getArray() )
+<value>$col</value>
+#end
+</$item>
+#end
+</AtoList>
+<LtoList>
+#foreach( $item in $LtoSet.keySet() )
+#set ( $Lto = $LtoSet.getObject("$item") )
+#set ( $Lto = $XmlUtil.convertToXmlCharWithLTO($Lto) )
+<$item>
+<RowInfo>
+#set ( $Info = $Lto.getInfoMap() )
+<ROW_COUNT>$Lto.size()</ROW_COUNT>
+#if ($Info.get("ROW_TOT"))
+<ROW_TOT>$Info.get("ROW_TOT")</ROW_TOT>
+#end
+#if ($Info.get("PG_NUM"))
+<PG_NUM>$Info.get("PG_NUM")</PG_NUM>
+#end
+#if ($Info.get("PG_TOT"))
+<PG_TOT>$Info.get("PG_TOT")</PG_TOT>
+#end
+#if ($Info.get("PG_SIZE"))
+<PG_SIZE>$Info.get("PG_SIZE")</PG_SIZE>
+#end
+</RowInfo>
+<RowList>
+#foreach( $Mto in $Lto.getList() )
+<Row>
+#foreach( $col in $Mto.keySet() )
+<$col>$Mto.get("$col")</$col>
+#end
+</Row>
+#end
+</RowList>
+</$item>
+#end
+</LtoList>
+</EffectDTO>

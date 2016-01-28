@@ -1,0 +1,14 @@
+SELECT
+        VSIT_RSVTN_D_ID     As "vsitRsvtnDId",
+        VSIT_RSVTN_M_ID     As "vsitRsvtnMId",
+        VNUM                As "vnum",
+        VSIT_COMP_NAME      As "vsitCompName",
+        VSIT_USER_NM        As "vsitUserNm",  
+        VSIT_USER_TEL       As "vsitUserTel", 
+        VSIT_USER_MAIL      As "vsitUserMail",
+        REG_DATE            As "regDate",     
+        REG_TIME            As "regTime"      
+FROM    TA_VSIT_RSVTN_D
+WHERE   1 = 1
+AND     VSIT_RSVTN_M_ID = $input.vsitRsvtnMId
+ORDER BY VNUM

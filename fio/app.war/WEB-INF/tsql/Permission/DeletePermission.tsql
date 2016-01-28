@@ -1,0 +1,25 @@
+#*
+  프로그램 권한 삭제
+*#
+
+##DELETE WS_USER_ROLE_PROGRAM_C
+##WHERE  
+##    USER_ID IN ((     select regexp_substr($input.userId,'[^,]+', 1, level) from dual 
+##                     connect by regexp_substr($input.userId, '[^,]+', 1, level) is not null
+##                    )
+##                ) AND  
+##    PGM_ID IN ((     select regexp_substr($input.programId,'[^,]+', 1, level) from dual 
+##                     connect by regexp_substr($input.programId, '[^,]+', 1, level) is not null
+##                    )
+##                   )
+
+UPDATE WS_USER_ROLE_PROGRAM_C
+   SET USE_YN = 'N'
+ WHERE USER_ID IN ((     select regexp_substr($input.userId,'[^,]+', 1, level) from dual
+                         connect by regexp_substr($input.userId, '[^,]+', 1, level) is not null
+                        )
+                     ) AND
+        PGM_ID IN ((     select regexp_substr($input.programId,'[^,]+', 1, level) from dual
+                         connect by regexp_substr($input.programId, '[^,]+', 1, level) is not null
+                        )
+                       )             

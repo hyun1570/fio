@@ -1,0 +1,319 @@
+SELECT
+        R_YEAR                          As "rYear",
+#if($input.fetch("sSearchType") == "C")        
+        FACT_CODE                         As "factCode",
+        FACT_NAME                         As "factName",
+#elseif($input.fetch("sSearchType") == "V")
+        VSIT_CODE_NM                    As "vsitCodeNm",
+        VSIT_CODE                       As "vsitCode",
+#elseif($input.fetch("sSearchType") == "G")
+        IN_GATE                         As "inGate",
+        IN_GATE_NM                      As "inGateNm",
+#end
+        M1_CNT                          As "m1Cnt",
+        (
+            CASE
+                WHEN M1_CNT = M1_OUT_CNT THEN 'N' 
+                ELSE 'Y' 
+            END
+        )                               As "m1Stat",
+        M2_CNT                          As "m2Cnt",
+		(
+    		CASE
+                WHEN M2_CNT = M2_OUT_CNT THEN 'N' 
+                ELSE 'Y' 
+            END
+		)                               As "m2Stat",
+		M3_CNT                          As "m3Cnt",
+		(
+		  CASE
+                WHEN M3_CNT = M3_OUT_CNT THEN 'N' 
+                ELSE 'Y' 
+		  END
+		)                               As "m3Stat",
+		M4_CNT                          As "m4Cnt",
+		(
+			CASE
+                WHEN M4_CNT = M4_OUT_CNT THEN 'N' 
+                ELSE 'Y' 
+			END
+		)                               As "m4Stat",
+		M3_CNT                          As "m5Cnt",
+		(
+		  CASE
+                WHEN M5_CNT = M5_OUT_CNT THEN 'N' 
+                ELSE 'Y' 
+		  END
+		)                               As "m5Stat",
+		M6_CNT                          As "m6Cnt",
+		(
+		  CASE
+		      WHEN M6_CNT = M6_OUT_CNT THEN 'N' 
+		      ELSE 'Y' 
+		  END
+		)                               As "m6Stat",
+		M7_CNT                          As "m7Cnt",
+		(
+          CASE
+              WHEN M7_CNT = M7_OUT_CNT THEN 'N' 
+              ELSE 'Y' 
+          END
+		)                               As "m7Stat",
+		M8_CNT                          As "m8Cnt",
+		(
+          CASE
+		      WHEN M8_CNT = M8_OUT_CNT THEN 'N' 
+		      ELSE 'Y' 
+		  END
+		)                               As "m8Stat",
+		M9_CNT                          As "m9Cnt",
+		(
+		  CASE
+		      WHEN M9_CNT = M9_OUT_CNT THEN 'N'
+		      ELSE 'Y' 
+		  END
+		)                               As "m9Stat",
+		M10_CNT                         As "m10Cnt",
+		(
+		  CASE
+		      WHEN M10_CNT = M10_OUT_CNT THEN 'N' 
+		      ELSE 'Y' 
+		  END
+		)                               As "m10Stat",
+		M11_CNT                         As "m11Cnt",
+		(
+		  CASE
+		      WHEN M11_CNT = M11_OUT_CNT THEN 'N' 
+		      ELSE 'Y' 
+		  END
+		)                               As "m11Stat",
+		M12_CNT                         As "m12Cnt",
+		(
+		  CASE
+		      WHEN M12_CNT = M12_OUT_CNT THEN 'N' 
+		      ELSE 'Y' 
+		  END
+		)                               As "m12Stat",
+		NVL($input.sSearchType, 'C')   As "searchType"
+
+FROM
+        (
+            SELECT  
+                SUBSTR(VSIT_DATE, 0, 4)                 AS R_YEAR,
+#if($input.fetch("sSearchType") == "C")                
+                FACT_CODE                               AS FACT_CODE,
+                (
+                    SELECT 
+                        CODE_NAME
+                    FROM    WS_COMMON_D
+                    WHERE   MAS_CODE = 'H140'
+                    AND     CODE = RV.FACT_CODE
+                )                                       AS FACT_NAME,
+#elseif($input.fetch("sSearchType") == "V")
+                VSIT_CODE                               AS VSIT_CODE,
+                (
+                    SELECT  CODE_NAME
+                    FROM    WS_COMMON_D
+                    WHERE   MAS_CODE = 'EPUPS'
+                    AND     CODE = VSIT_CODE
+                )                                       AS VSIT_CODE_NM,
+#elseif($input.fetch("sSearchType") == "G")
+                IN_GATE                                 As IN_GATE,
+                (
+                    SELECT  USER_NAME 
+                    FROM    WS_USER_C 
+                    WHERE   USER_ID = IN_GATE
+                )                                       As IN_GATE_NM,
+#end                
+                SUM(
+                    CASE
+                        WHEN SUBSTR(VSIT_DATE, 5, 2) = '01' THEN 1
+                        ELSE 0
+                    END
+                )                                       AS M1_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '01' AND IO_STAT = 'O' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M1_OUT_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '02' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M2_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '02' AND IO_STAT = 'O' THEN 1
+				    ELSE 0
+				    END
+				)                                       AS M2_OUT_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '03' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M3_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '03' AND IO_STAT = 'O' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M3_OUT_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '04' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M4_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '04' AND IO_STAT = 'O' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M4_OUT_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '05' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M5_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '05' AND IO_STAT = 'O' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M5_OUT_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '06' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M6_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '06' AND IO_STAT = 'O' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M6_OUT_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '07' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M7_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '07' AND IO_STAT = 'O' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M7_OUT_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '08' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M8_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '08' AND IO_STAT = 'O' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M8_OUT_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '09' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M9_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '09' AND IO_STAT = 'O' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M9_OUT_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '10' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M10_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '10' AND IO_STAT = 'O' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M10_OUT_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '11' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M11_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '11' AND IO_STAT = 'O' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M11_OUT_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '12' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M12_CNT,
+				SUM(
+				    CASE
+				        WHEN SUBSTR(VSIT_DATE, 5, 2) = '12' AND IO_STAT = 'O' THEN 1
+				        ELSE 0
+				    END
+				)                                       AS M12_OUT_CNT
+            FROM 
+                (
+                    SELECT 
+							R.VSIT_MNG_R_ID, 
+							R.VSIT_DATE, 
+							R.VSIT_RSVTN_M_ID,
+							R.VSIT_RSVTN_D_ID,
+							R.IN_GATE,
+							R.IN_TIME,
+							R.OUT_GATE,
+							R.OUT_TIME,
+							R.STRG_NO,
+							R.ETC,
+							R.REG_DATE,
+							R.REG_TIME,
+							R.MOD_DATE,
+							R.MOD_TIME,
+							R.IO_STAT,
+							S.FACT_CODE, 
+							S.DEPT_CODE, 
+							S.VSIT_CODE
+                    FROM    TA_VSIT_MNG_RSVTN_Z R,
+                            (
+                                SELECT 
+                                        M.FACT_CODE, 
+                                        M.DEPT_CODE, 
+                                        M.VSIT_CODE,
+                                        M.VSIT_RSVTN_M_ID, 
+                                        D.VSIT_RSVTN_D_ID 
+                                FROM TA_VSIT_RSVTN_M M, TA_VSIT_RSVTN_D D
+                                WHERE M.VSIT_RSVTN_M_ID = D.VSIT_RSVTN_M_ID
+                                  AND M.BP_CODE = $input.sBpCode
+                            ) S
+                    WHERE R.VSIT_RSVTN_M_ID = S.VSIT_RSVTN_M_ID
+                    AND R.VSIT_RSVTN_D_ID = S.VSIT_RSVTN_D_ID
+                ) RV
+            WHERE SUBSTR(VSIT_DATE, 0, 4) = $input.sYear
+#if($input.fetch("sSearchType") == "C") 
+            GROUP BY SUBSTR(VSIT_DATE, 0, 4), FACT_CODE
+            ORDER BY FACT_CODE            
+#elseif($input.fetch("sSearchType") == "V")
+            GROUP BY SUBSTR(VSIT_DATE, 0, 4), VSIT_CODE
+            ORDER BY VSIT_CODE            
+#elseif($input.fetch("sSearchType") == "G")
+            GROUP BY SUBSTR(VSIT_DATE, 0, 4), IN_GATE            
+            ORDER BY IN_GATE            
+#end
+)

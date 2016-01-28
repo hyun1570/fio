@@ -1,0 +1,31 @@
+#*
+  프로그램 권한 생성
+*#
+INSERT INTO WS_USER_ROLE_PROGRAM_C 
+(
+    USER_ROLE_PGM_ID, 
+    USER_ID, 
+    USER_ROLE_ID, 
+    PGM_ID,
+    USE_YN, 
+    REG_ID, 
+    REG_DATE, 
+    REG_TIME, 
+    MOD_ID, 
+    MOD_DATE, 
+    MOD_TIME
+) 
+VALUES
+(
+    WS_USER_ROLE_PROGRAM_C_SEQ1.NEXTVAL,
+    $input.userId, 
+    $input.userRoleId, 
+    $input.programId,  
+    'Y',  
+    $input.regId,
+    TO_CHAR(sysDate, 'YYYYMMDD'),
+    TO_CHAR(sysDate, 'HH24MISS'),
+    $input.modId,
+    TO_CHAR(sysDate, 'YYYYMMDD'),
+    TO_CHAR(sysDate, 'HH24MISS')
+)

@@ -1,0 +1,108 @@
+SELECT
+        U.CORP_ID           As "corpId",
+        U.USER_ID           As "userId",
+        U.USER_NAME         As "userName",
+        C.ENAME             As "userNameEn",
+        U.USER_TYPE         As "userType",
+        U.USER_CLSS         As "userClss",
+        C.BUSS_CODE         As "bussCode",
+        (
+            SELECT DNAME
+            FROM COMM_EMP_CODE_INFO@COMM_DB
+            WHERE HCODE = 'H016'
+            AND DCODE = C.BUSS_CODE
+        )                   As "bussName", -- 사업부
+        C.NODE_CODE         As "nodeCode",
+        (
+            SELECT DNAME
+            FROM COMM_EMP_CODE_INFO@COMM_DB
+            WHERE HCODE = 'SSSS'
+            AND DCODE = C.NODE_CODE
+        )                   As "nodeName", -- 사업장
+        C.DEPT_CODE         As "deptCode",
+        (
+            SELECT DEPT_NAME
+            FROM COMM_DEPT_INFO@COMM_DB
+            WHERE DEPT_CODE = C.DEPT_CODE
+        )                   As "deptName", -- 부서
+        C.DUTY_RANK         As "dutyRank",
+        (
+            SELECT DNAME
+            FROM COMM_EMP_CODE_INFO@COMM_DB
+            WHERE HCODE = 'H001'
+            AND DCODE = C.DUTY_RANK
+        )                   As "dutyRankName", --직위
+        C.DUTY_LEVEL        As "dutyLevel",
+        (
+            SELECT DNAME
+            FROM COMM_EMP_CODE_INFO@COMM_DB
+            WHERE HCODE = 'H004'
+            AND DCODE = C.DUTY_LEVEL
+        )                   As "dutyLevelName", --직책
+        C.DUTY_GRD_CD       As "dutyGrdCd",
+        (
+            SELECT DNAME
+            FROM COMM_EMP_CODE_INFO@COMM_DB
+            WHERE HCODE = 'H023'
+            AND DCODE = C.DUTY_GRD_CD
+        )                   As "dutyGrdName", --직무급(기능)
+        C.DUTY_STEP         As "dutyStep",
+        (
+            SELECT
+            DNAME
+            FROM COMM_EMP_CODE_INFO@COMM_DB
+            WHERE HCODE = 'H002'
+            AND DCODE = C.DUTY_STEP
+        )                   As "dutyStepName", --직급
+        C.EMAIL             As "email",
+        C.PER_ZIP           As "perZip",
+        C.PER_ADDR          As "perAddr",
+        C.PER_ADDR2         As "perAddr2",
+        C.OFFICE_TEL        As "officeTel",
+        C.HOME_TEL          As "homeTel",
+        C.MOBIL_TEL         As "mobilTel",
+        C.EMP_CLASS         As "empClass",
+        (
+            SELECT
+            DNAME
+            FROM COMM_EMP_CODE_INFO@COMM_DB
+            WHERE HCODE = 'H017'
+            AND DCODE = C.EMP_CLASS
+        )                   As "empClassName", --사원구분
+        ( SELECT  FACT_CODE FROM TA_DEPT_MNG_C WHERE DEPT_CODE = C.DEPT_CODE )         As "factCode",
+        (SELECT CODE_NAME
+         FROM WS_COMMON_D
+         WHERE MAS_CODE = 'H140'
+         AND CODE = ( SELECT  FACT_CODE FROM TA_DEPT_MNG_C WHERE DEPT_CODE = C.DEPT_CODE ) 
+        )                   As "factName", --공장
+        C.LOC_CODE          As "locCode",
+        (
+            SELECT
+            DNAME
+            FROM COMM_EMP_CODE_INFO@COMM_DB
+            WHERE HCODE = 'H019'
+            AND DCODE = C.LOC_CODE
+        )                   As "locName", --주재지
+        C.SEX_KIND          As "sexKind",
+        (
+            SELECT
+            DNAME
+            FROM COMM_EMP_CODE_INFO@COMM_DB
+            WHERE HCODE = 'Z002'
+            AND DCODE = C.SEX_KIND
+        )                   As "sexKindName", --성별
+        (
+            SELECT   (ListAgg(ROLE_CODE, ',') WITHIN GROUP(ORDER BY rownum)) STR FROM WS_USER_ROLE_C UR, WS_ROLE_C RO
+            WHERE    UR.ROLE_ID = RO.ROLE_ID
+            AND      UR.SITE_ID = '146' -- 출입관리 SITE_ID 임
+            AND      UR.USE_YN = 'Y'
+            AND      RO.USE_YN = 'Y'
+            AND      UR.USER_ID = U.USER_ID
+            GROUP BY UR.USER_ID
+        )                   As "roleCodes",
+        SUBSTR(LAST_LOGN_DATE, 0, 4) || '-' || SUBSTR(LAST_LOGN_DATE, 5, 2) || '-' || SUBSTR(LAST_LOGN_DATE, 7, 2) As "lastLoginDate",   -- 최종로그인일자
+        SUBSTR(LAST_LOGN_TIME, 0, 2) || ':' || SUBSTR(LAST_LOGN_TIME, 3, 2) || ':' || SUBSTR(LAST_LOGN_TIME, 5, 2) As "lastLoginTime"    -- 최종로그인시간
+FROM    WS_USER_C U, COMM_EMP_INFO@COMM_DB C
+WHERE   U.USER_ID = C.SNO(+)
+AND     U.USER_ID     = $input.userId
+AND     U.USE_YN        = 'Y'

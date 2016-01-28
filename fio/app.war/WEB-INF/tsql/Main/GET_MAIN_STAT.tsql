@@ -1,0 +1,64 @@
+SELECT 
+	factCode As "factCode",
+	MAX(factName) As "factName",
+	SUM(rsvtnCnt) As "rsvtnCnt",
+	SUM(acceptCnt) As "acceptCnt",
+	SUM(waitCnt) As "waitCnt"
+
+FROM
+(
+SELECT
+        BASE.CODE                   As factCode,
+        MAX(CODE_NAME)              As factName,
+        COUNT(STAT.APPR_STATUS)     As rsvtnCnt,
+        SUM(
+            CASE 
+                WHEN STAT.APPR_STATUS = 'A' THEN 1 
+                ELSE 0 
+            END
+        )                           As acceptCnt,
+        SUM(
+            CASE 
+                WHEN STAT.APPR_STATUS = 'N' THEN 1 
+                ELSE 0 
+            END
+        )                           As waitCnt,
+        MAX(DISP_ORD)               As DISP_ORD
+FROM 
+        (
+            SELECT
+                    C.CODE,
+                    C.CODE_NAME,
+                    C.DISP_ORD
+            FROM
+                    (
+                        SELECT  CODE, CODE_NAME, DISP_ORD 
+                        FROM    WS_COMMON_D 
+                        WHERE   MAS_CODE = 'H140' 
+                        AND     USE_YN = 'Y'
+                    ) C,
+                    (
+                        SELECT * FROM (
+                            SELECT  ( SELECT  FACT_CODE FROM TA_DEPT_MNG_C WHERE DEPT_CODE = U.DEPT_CODE ) AS FACT_CODE  
+                            FROM    COMM_EMP_INFO@COMM_DB U 
+                            WHERE   1 = 1  
+##                            AND     NODE_CODE = 'CC' 
+                            AND     USE_YN = 'Y'
+                        ) WHERE FACT_CODE IS NOT NULL
+                        GROUP BY FACT_CODE
+                    ) E
+            WHERE   C.CODE = E.FACT_CODE
+            ORDER BY C.DISP_ORD
+        ) BASE,
+        (
+            SELECT
+                    FACT_CODE,
+                    APPR_STATUS
+             FROM   TA_VSIT_RSVTN_M M 
+            WHERE   TO_NUMBER(TO_CHAR(SYSDATE, 'YYYYMMDD')) BETWEEN TO_NUMBER(VSIT_RSVTN_FROM_DATE) AND TO_NUMBER(NVL(VSIT_RSVTN_TO_DATE, VSIT_RSVTN_FROM_DATE))
+        ) STAT
+WHERE   BASE.CODE = STAT.FACT_CODE(+)
+GROUP BY CODE
+) 
+GROUP BY ROLLUP(factCode)
+ORDER BY MAX(DISP_ORD)||DECODE(factCode, null, 1, 0)

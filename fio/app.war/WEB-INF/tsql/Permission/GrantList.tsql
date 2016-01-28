@@ -1,0 +1,20 @@
+#*
+  프로그램 권한
+*#
+
+ SELECT RO.INS_AUTH As "insert",
+         RO.UP_AUTH  As "update",
+         RO.DEL_AUTH As "delete"
+ FROM WS_USER_ROLE_PROGRAM_C RP,
+       WS_USER_ROLE_C UR,
+       WS_ROLE_C RO,
+       WS_PROGRAM_C PG
+  WHERE RP.PGM_ID = PG.PGM_ID
+    AND UR.USER_ROLE_ID = RP.USER_ROLE_ID
+    AND RO.ROLE_ID = UR.ROLE_ID
+    AND RP.USER_ID = $input.userId
+    AND PG.MENU_ID = $input.menuId
+#if ($input.isContain("siteId"))
+    AND WS.SITE_ID = $input.siteId
+#end
+    AND RP.USE_YN  = 'Y'

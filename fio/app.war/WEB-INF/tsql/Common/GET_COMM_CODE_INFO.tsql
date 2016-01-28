@@ -1,0 +1,18 @@
+ select CODE As "dcode", 
+        CODE_NAME As "dname" 
+   from WS_COMMON_D
+  where MAS_CODE = $input.hcode
+    and USE_YN = 'Y'
+    and CODE in (
+             select T.FACT_CODE 
+               from TA_DEPT_MNG_C   T, 
+                    COMM_DEPT_INFO@COMM_DB  D
+              where T.DEPT_CODE = D.DEPT_CODE
+                and T.FACT_CODE is not null
+#if($input.fetch("sBpCode") == "CC")
+                and NODE_CODE   = $input.sBpCode
+#else
+                and FACT_CODE   = $input.sBpCode
+#end
+        )
+  order by  CODE

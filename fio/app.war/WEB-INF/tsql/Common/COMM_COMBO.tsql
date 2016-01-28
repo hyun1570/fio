@@ -1,0 +1,11 @@
+SELECT
+D.CODE As "code", 
+D.CODE_NAME As "codeName"
+FROM WS_COMMON_M M, WS_COMMON_D D
+WHERE M.MAS_CODE = D.MAS_CODE
+AND M.SITE_CODE = D.SITE_CODE
+AND M.MAS_CODE = $input.masCode
+#if($input.isContain("sSiteCode"))
+AND D.SITE_CODE = $input.sSiteCode
+#end
+ORDER BY D.DISP_ORD

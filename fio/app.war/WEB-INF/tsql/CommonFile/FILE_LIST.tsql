@@ -1,0 +1,37 @@
+## 파일정보 리스트
+
+SELECT
+        ROW_NUMBER() 
+        OVER(ORDER BY FILE_ATCH_ID DESC)            As "no",
+        FILE_ATCH_ID      As "fileAttachId",      -- 파일ID
+        BBS_ID                As "boardId",           -- 게시판ID
+        FILE_PATH           As "filePath",          -- 파일위치
+        ORIG_FILE_NAME   As "origFileName",      -- 원본파일명
+        SAVE_FILE_NAME   As "saveFileName",      -- 저장파일명
+        FILE_SIZE            As "fileSize",          -- 파일사이즈
+        DOWN_CNT           As "downloadCount",     -- 다운로드수
+        REG_ID                 As "regId",             -- 등록자ID
+        REG_DATE            As "regDate",           -- 등록일자
+        REG_TIME             As "regTime"            -- 등록시간
+FROM
+        WS_FILE_ATTACH_Z
+WHERE   1 = 1
+#if ($input.isContain("fileAttachId"))
+    AND FILE_ATCH_ID = $input.fileAttachId
+#end
+#if ($input.isContain("boardId"))
+    AND BBS_ID = $input.boardId
+#end
+#if ($input.isContain("ref1"))
+    AND REF1 = $input.ref1
+#end
+ #if ($input.isContain("ref2"))
+    AND REF2 = $input.ref2
+#end
+#if ($input.isContain("ref3"))
+    AND REF3 = $input.ref3
+#end
+#if ($input.isContain("ref4"))
+    AND REF4 = $input.ref4
+#end
+ORDER BY FILE_ATCH_ID DESC

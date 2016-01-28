@@ -1,0 +1,34 @@
+## 파일정보 저장
+
+INSERT INTO WS_FILE_ATTACH_Z
+(
+     FILE_ATCH_ID,          -- 파일ID
+     BBS_ID,                -- 게시판ID
+     FILE_PATH,             -- 파일위치
+     ORIG_FILE_NAME,        -- 원본파일명
+     SAVE_FILE_NAME,        -- 저장파일명
+     FILE_SIZE,             -- 파일사이즈
+     REG_ID,                -- 등록자ID
+     REG_DATE,              -- 등록일자
+     REG_TIME,               -- 등록시간,
+     REF1,                    -- 참조1
+     REF2,                    -- 참조2
+     REF3,                    -- 참조3
+     REF4                     -- 참조4
+)
+VALUES
+(
+    WS_FILE_ATTACH_Z_SEQ1.nextval,
+     $input.boardId,
+     $input.filePath,
+     $input.origFileName,
+     $input.saveFileName,
+     $input.fileSize,
+     $input.regId,
+     TO_CHAR(sysDate, 'YYYYMMDD'),
+     TO_CHAR(sysDate, 'HH24MISS'),
+     $input.ref1,
+     $input.ref2,
+     $input.ref3,
+     $input.ref4
+)

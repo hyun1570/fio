@@ -1,0 +1,137 @@
+SELECT
+		EV.VSIT_COMP_NM       As "vsitCompNm",    
+		EV.VSIT_REG_NO        As "vsitRegNo",     
+		EV.VSIT_USER_NM       As "vsitUserNm",    
+		EM.VSIT_MNG_E_ID      As "vsitMngEId",    
+		EM.VSIT_DATE          As "vsitDate",      
+		EV.EVRY_DAY_VSIT_ID   As "evryDayVsitId", 
+		EM.IN_GATE_1          As "inGate1",
+        (SELECT USER_NAME
+         FROM WS_USER_C
+         WHERE USER_ID = EM.IN_GATE_1
+        )                     As "inGateNm1",
+		EM.IN_TIME_1          As "inTime1",       
+		EM.OUT_GATE_1         As "outGate1",
+        (SELECT USER_NAME
+         FROM WS_USER_C
+         WHERE USER_ID = EM.OUT_GATE_1
+        )                     As "outGateNm1",		      
+		EM.OUT_TIME_1         As "outTime1",      
+		EM.IN_GATE_2          As "inGate2",
+		(SELECT USER_NAME
+         FROM WS_USER_C
+         WHERE USER_ID = EM.IN_GATE_2
+        )                     As "inGateNm2",
+		EM.IN_TIME_2          As "inTime2",       
+		EM.OUT_GATE_2         As "outGate2",  
+		(SELECT USER_NAME
+         FROM WS_USER_C
+         WHERE USER_ID = EM.OUT_GATE_2
+        )                     As "outGateNm2",    
+		EM.OUT_TIME_2         As "outTime2",      
+		EM.IN_GATE_3          As "inGate3",
+		(SELECT USER_NAME
+         FROM WS_USER_C
+         WHERE USER_ID = EM.IN_GATE_3
+        )                     As "inGateNm3",       
+		EM.IN_TIME_3          As "inTime3",       
+		EM.OUT_GATE_3         As "outGate3",
+		(SELECT USER_NAME
+         FROM WS_USER_C
+         WHERE USER_ID = EM.OUT_GATE_3
+        )                     As "outGateNm3",      
+		EM.OUT_TIME_3         As "outTime3",      
+		EM.IN_GATE_4          As "inGate4",
+		(SELECT USER_NAME
+         FROM WS_USER_C
+         WHERE USER_ID = EM.IN_GATE_4
+        )                     As "inGateNm4",       
+		EM.IN_TIME_4          As "inTime4",       
+		EM.OUT_GATE_4         As "outGate4",
+		(SELECT USER_NAME
+         FROM WS_USER_C
+         WHERE USER_ID = EM.OUT_GATE_4
+        )                     As "outGateNm4",      
+		EM.OUT_TIME_4         As "outTime4",      
+		EM.IN_GATE_5          As "inGate5",
+		(SELECT USER_NAME
+         FROM WS_USER_C
+         WHERE USER_ID = EM.IN_GATE_5
+        )                     As "inGateNm5",       
+		EM.IN_TIME_5          As "inTime5",       
+		EM.OUT_GATE_5         As "outGate5",  
+		(SELECT USER_NAME
+         FROM WS_USER_C
+         WHERE USER_ID = EM.OUT_GATE_5
+        )                     As "outGateNm5",    
+		EM.OUT_TIME_5         As "outTime5",      
+		EM.ETC                As "etc",           
+		NVL(EM.IO_STAT, 'N')  As "ioStat",        
+		EM.IO_CNT             As "ioCnt",         
+		EM.REG_DATE           As "regDate",       
+		EM.REG_TIME           As "regTime",       
+		EM.MOD_DATE           As "modDate",       
+		EM.MOD_TIME           As "modTime"        
+FROM
+        (
+	        SELECT 
+					EVRY_DAY_VSIT_ID,
+					VSIT_COMP_NM, 
+					VSIT_REG_NO,
+					VSIT_USER_NM
+	        FROM    TA_EVRY_DAY_VSIT 
+            WHERE   IN_OUT_STOP = 'N'
+              AND BP_CODE  = $input.bpCode
+        ) EV,
+        (
+            SELECT
+					VSIT_MNG_E_ID,
+					VSIT_DATE,
+					EVRY_DAY_VSIT_ID,
+					IN_GATE_1,
+					IN_TIME_1,
+					OUT_GATE_1,
+					OUT_TIME_1,
+					IN_GATE_2,
+					IN_TIME_2,
+					OUT_GATE_2,
+					OUT_TIME_2,
+					IN_GATE_3,
+					IN_TIME_3,
+					OUT_GATE_3,
+					OUT_TIME_3,
+					IN_GATE_4,
+					IN_TIME_4,
+					OUT_GATE_4,
+					OUT_TIME_4,
+					IN_GATE_5,
+					IN_TIME_5,
+					OUT_GATE_5,
+					OUT_TIME_5,
+					ETC,
+					IO_STAT,
+					IO_CNT,
+					REG_DATE,
+					REG_TIME,
+					MOD_DATE,
+					MOD_TIME
+            FROM    TA_VSIT_MNG_EVRY_Z
+            WHERE   VSIT_DATE = TO_CHAR(SYSDATE, 'YYYYMMDD')
+        )EM
+WHERE   EM.EVRY_DAY_VSIT_ID(+) = EV.EVRY_DAY_VSIT_ID
+#if( $input.fetch("sType") == "sVsitUserNm")
+    #if($input.isEmpty("sTypeNm"))
+    #else
+AND UPPER(EV.VSIT_USER_NM) LIKE '%'|| UPPER($input.sTypeNm) ||'%'
+    #end
+#elseif( $input.fetch("sType") == "sVsitRegNo")
+    #if($input.isEmpty("sTypeNm"))
+    #else
+AND UPPER(EV.VSIT_REG_NO) LIKE '%'|| UPPER($input.sTypeNm) ||'%'
+    #end    
+#end
+
+#if($input.fetch("procEndYn") == "Y")
+AND NVL(EM.IO_STAT, 'N') != 'E' 
+#end
+ORDER BY EV.VSIT_REG_NO 

@@ -1,0 +1,11 @@
+#*
+  Update 그리드 헤더 
+*#
+##DELETE WS_PROGRAM_GRID_SET_Z
+## WHERE PGM_GRID_SET_ID = $input.programGridSetId 
+##   AND PGM_ID = $input.programId 
+
+UPDATE WS_PROGRAM_GRID_SET_Z
+   SET USE_YN = 'N'
+ WHERE PGM_GRID_SET_ID = $input.programGridSetId
+   AND PGM_ID          = $input.programId

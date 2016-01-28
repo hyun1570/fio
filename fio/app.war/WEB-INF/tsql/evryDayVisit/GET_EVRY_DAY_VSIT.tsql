@@ -1,0 +1,53 @@
+SELECT 
+	EVRY_DAY_VSIT_ID      As "evryDayVsitId", 
+	VSIT_REG_NO           As "vsitRegNo",
+	BP_CODE               As "bpCode",        
+	DEPT_CODE             As "deptCode",      
+	(SELECT DEPT_NAME
+	 FROM COMM_DEPT_INFO@COMM_DB
+	 WHERE DEPT_CODE = EDV.DEPT_CODE
+	)                     As "deptName",
+	INTV_USER_ID          As "intvUserId",
+    (SELECT KNAME
+     FROM COMM_EMP_INFO@COMM_DB
+     WHERE SNO = EDV.INTV_USER_ID
+    )                     As "intvUserName",    
+	INTV_USER_TEL         As "intvUserTel",   
+	INTV_USER_MAIL        As "intvUserMail",  
+	VSIT_COMP_NM          As "vsitCompNm",    
+	VSIT_CODE             As "vsitCode",      
+	(SELECT CODE_NAME              
+	 FROM WS_COMMON_D
+	 WHERE MAS_CODE = 'EPUPS'
+	 AND CODE = EDV.VSIT_CODE
+	)                     As "vsitName",
+	VSIT_USER_NM          As "vsitUserNm",    
+	VSIT_USER_TEL         As "vsitUserTel",   
+	VSIT_USER_MAIL        As "vsitUserMail",  
+	ETC                   As "etc",           
+	IN_OUT_STOP           As "inOutStop",         
+	REG_ID                As "regId",         
+	REG_DATE              As "regDate",       
+	REG_TIME              As "regTime",       
+	MOD_ID                As "modId",         
+	MOD_DATE              As "modDate",       
+	MOD_TIME              As "modTime"        
+FROM TA_EVRY_DAY_VSIT EDV
+WHERE 1=1
+#if( $input.fetch("sType") == "sVsitUserNm")
+    #if($input.isEmpty("sTypeNm"))
+    #else
+        AND UPPER(EDV.VSIT_USER_NM) LIKE '%'|| UPPER($input.sTypeNm) ||'%'
+    #end
+#elseif( $input.fetch("sType") == "sVsitRegNo")
+    #if($input.isEmpty("sTypeNm"))
+    #else
+        AND UPPER(EDV.VSIT_REG_NO) LIKE '%'|| UPPER($input.sTypeNm) ||'%'
+    #end    
+#end
+
+#if( $input.fetch("sInOutStop") != "Y")
+    AND IN_OUT_STOP = 'N'
+#end
+
+ORDER BY VSIT_REG_NO

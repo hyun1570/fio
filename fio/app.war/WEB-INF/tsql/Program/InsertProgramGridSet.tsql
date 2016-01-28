@@ -1,0 +1,51 @@
+#*
+  Insert 그리드 헤더 
+*#
+INSERT INTO WS_PROGRAM_GRID_SET_Z 
+(
+    PGM_GRID_SET_ID, 
+    PGM_ID, 
+    HD_TEXT, 
+    COLM_TYPE, 
+    MAP_ID, 
+    WDTH, 
+    HEI, 
+    DISP_ORD, 
+    ALGN, 
+    VISI, 
+    DVLP, 
+    LANG, 
+    REMK, 
+    USE_YN, 
+    REG_ID, 
+    REG_DATE, 
+    REG_TIME, 
+    MOD_ID, 
+    MOD_DATE, 
+    MOD_TIME, 
+    TYPE_VALUE
+) 
+VALUES
+(
+    WS_PROGRAM_GRID_SET_Z_SEQ1.NEXTVAL, 
+    $input.programId, 
+    $input.headerText, 
+    $input.columnType, 
+    $input.mappingId, 
+    $input.width, 
+    $input.height, 
+    $input.dispOrder, 
+    $input.align, 
+    $input.visible, 
+    $input.develop, 
+    $input.language, 
+    $input.remarks, 
+    $input.status,
+    $input.regId,  
+    TO_CHAR(sysDate, 'YYYYMMDD'),
+    TO_CHAR(sysDate, 'HH24MISS'),
+    $input.modId,
+    TO_CHAR(sysDate, 'YYYYMMDD'),
+    TO_CHAR(sysDate, 'HH24MISS'), 
+    $input.typeValue
+)

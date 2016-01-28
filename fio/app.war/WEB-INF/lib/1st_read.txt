@@ -1,0 +1,43 @@
+1. DAFrame 2.x 라이브러리 목록
+
+### DAFrame 2.x Core & Extension
+daframe-core.jar 
+daframe-ext.jar
+
+### For XML Binding - JAXB 2.2.5 RI
+jaxb-api.jar
+jaxb-impl.jar
+jaxb-jsr173_1.0_api.jar
+jaxb1-impl.jar
+
+### For Excel Handling
+poi-3.8-20120326.jar
+
+### For TSQL Scripting
+velocity-1.7.jar
+
+### Apache Commons
+commons-cli-1.2.jar
+commons-collections-3.2.1.jar
+commons-dbcp-1.2.2.jar
+commons-email-1.1.jar
+commons-fileupload-1.2.2.jar
+commons-io-2.2.jar
+commons-lang-2.4.jar
+commons-net-3.1.jar
+commons-pool-1.6.jar
+
+### For JNDI (for DBCP)
+jndi-1.2.1-fssp-1.2.b3-fscontext.jar
+jndi-1.2.1-fssp-1.2.b3-providerutil.jar
+
+### For Logging
+log4j-1.2.17.jar
+
+### For JavaMail API
+activation-1.1.jar
+mail-1.4.2.jar
+
+### For Default External Interface
+json-simple-1.1.1.jar (JSON)
+wisegrid-xlib.jar (WiseGrid)

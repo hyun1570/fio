@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="euc-kr"?>
+<FrameConfig xsi:noNamespaceSchemaLocation="frame.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<FrameList>
+		<Frame name="VMS-CP" using="true" >
+			<LoggerName>FMB-VMS-CP</LoggerName>
+			<ClassName>com.cni.fw.vms.fmb.cp.CommandProcess</ClassName>
+			<ParamList>
+				<Param name="CMD_NULL">NO_CMD</Param>
+				<Param name="CMD_NOFOUND">NO_CMD</Param>
+			</ParamList>
+		</Frame>
+		
+		
+		<Frame name="VMS-IP" using="true" >
+			<LoggerName>FMB-VMS-IP</LoggerName>
+			<ClassName>com.cni.fw.vms.fmb.iop.InputProcess</ClassName>
+			<ParamList>
+				<Param name="X"></Param>
+				<Param name="VMS">com.cni.fw.made.vms.cc.ip.IPVMS001CC</Param>
+			</ParamList>
+		</Frame>
+		
+		
+		<Frame name="VMS-TM" using="true" >
+			<LoggerName>FMB-VMS-TM</LoggerName>
+			<ClassName>com.cni.fw.vms.fmb.tm.TransactionManagement</ClassName>
+			<ParamList>
+				<Param name="Redirect">SKIP</Param>
+				<Param name="NA">com.cni.fw.arch.smb.ac.BasicService</Param>
+				<Param name="Tx">com.cni.fw.arch.smb.ac.NormalTxService</Param>
+				<Param name="XA">com.cni.fw.arch.smb.ac.DistributedTxService</Param>
+			</ParamList>
+		</Frame>
+
+		<Frame name="VMS-OP" using="true" >
+			<LoggerName>FMB-VMS-OP</LoggerName>
+			<ClassName>com.cni.fw.vms.fmb.iop.OutputProcess</ClassName>
+			<ParamList>
+				<Param name="X"></Param>
+				<Param name="SECOND-COMMAND">VMS-TM</Param>
+				<Param name="CHAINED">VMS-TM</Param>
+				<Param name="CHAINED-TX">VMS-TM</Param>
+				<Param name="BRANCH">VMS-TM</Param>
+				<Param name="BRANCH-TX">VMS-TM</Param>
+				
+				<Param name="VMS">com.cni.fw.made.vms.cc.op.OPVMS001CC</Param>
+			</ParamList>
+		</Frame>
+		
+		
+	</FrameList>
+</FrameConfig>

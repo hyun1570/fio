@@ -1,0 +1,88 @@
+SELECT 
+        M.VSIT_DATE                   As "vsitDate", 
+	    E.VSIT_REG_NO                 As "vsitRegNo", 
+	    E.VSIT_USER_NM                As "vsitUserNm",
+	    M.IN_GATE_1                   As "inGate1",
+	    (SELECT USER_NAME 
+	     FROM WS_USER_C 
+	     WHERE USER_ID = M.IN_GATE_1
+	    )                             As "inGate1Nm",
+	    M.IN_TIME_1                   As "inTime1",
+	    M.OUT_GATE_1                  As "outGate1",
+	    (SELECT USER_NAME 
+	     FROM WS_USER_C 
+	     WHERE USER_ID = M.OUT_GATE_1
+	    )                             As "outGate1Nm",
+	    M.OUT_TIME_1                  As "outTime1",
+	    M.IN_GATE_2                   As "inGate2",
+	    (SELECT USER_NAME 
+	     FROM WS_USER_C 
+	     WHERE USER_ID = M.IN_GATE_2
+	    )                             As "inGate2Nm",
+	    M.IN_TIME_2                   As "inTime2",
+	    M.OUT_GATE_2                  As "outGate2",
+	    (SELECT USER_NAME 
+	     FROM WS_USER_C 
+	     WHERE USER_ID = M.OUT_GATE_2
+	    )                             As "outGate2Nm",
+	    M.OUT_TIME_2                  As "outTime2",
+	    M.IN_GATE_3                   As "inGate3",
+	    (SELECT USER_NAME 
+	     FROM WS_USER_C 
+	     WHERE USER_ID = M.IN_GATE_3
+	    )                             As "inGate3Nm",
+	    M.IN_TIME_3                   As "inTime3",
+        M.OUT_GATE_3                  As "outGate3",
+	    (SELECT USER_NAME 
+	     FROM WS_USER_C 
+	     WHERE USER_ID = M.OUT_GATE_3
+	    )                             As "outGate3Nm",
+	    M.OUT_TIME_3                  As "outTime3",
+	    M.IN_GATE_4                   As "inGate4",
+	    (SELECT USER_NAME 
+	     FROM WS_USER_C 
+	     WHERE USER_ID = M.IN_GATE_4
+	    )                             As "inGate4Nm",
+	    M.IN_TIME_4                   As "inTime4",
+        M.OUT_GATE_4                  As "outGate4",
+	    (SELECT USER_NAME 
+	     FROM WS_USER_C 
+	     WHERE USER_ID = M.OUT_GATE_4
+	    )                             As "outGate4Nm",
+	    M.OUT_TIME_4                  As "outTime4",
+	    M.IN_GATE_5                   As "inGate5",
+	    (SELECT USER_NAME 
+	     FROM WS_USER_C 
+	     WHERE USER_ID = M.IN_GATE_5
+	    )                             As "inGate5Nm",
+	    M.IN_TIME_5                   As "inTime5",
+        M.OUT_GATE_5                  As "outGate5",
+	    (SELECT USER_NAME 
+	     FROM WS_USER_C 
+	     WHERE USER_ID = M.OUT_GATE_5
+	    )                             As "outGate5Nm",
+	    M.OUT_TIME_5                  As "outTime5",
+	    (
+	       CASE
+	           WHEN M.IO_STAT = 'I' THEN 'I'
+	           WHEN M.IO_STAT = 'O' OR M.IO_STAT = 'E' THEN 'O'
+	       END
+	    
+	    )                             As "ioStat"
+FROM    TA_VSIT_MNG_EVRY_Z M, TA_EVRY_DAY_VSIT E
+WHERE   M.EVRY_DAY_VSIT_ID = E.EVRY_DAY_VSIT_ID
+#if($input.fetch("sFromDate") != "" && $input.fetch("sToDate") != "") 
+AND     TO_NUMBER(M.VSIT_DATE) BETWEEN TO_NUMBER($input.sFromDate) AND TO_NUMBER($input.sToDate)
+#end
+
+#if($input.fetch("sType") == "sRegNo")
+AND     E.VSIT_REG_NO LIKE '%'|| $input.sTypeNm ||'%'
+#elseif($input.fetch("sType") == "sUserNm")
+AND     E.VSIT_USER_NM LIKE '%'|| $input.sTypeNm ||'%'
+#end
+
+#if($input.isContain("vsitRegNo"))
+AND     E.VSIT_REG_NO = $input.vsitRegNo
+#end
+
+ORDER BY M.VSIT_DATE, E.VSIT_REG_NO ASC

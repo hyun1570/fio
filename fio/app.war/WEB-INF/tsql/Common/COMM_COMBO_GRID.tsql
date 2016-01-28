@@ -1,0 +1,37 @@
+## 공통코드
+## 코드 조회
+
+SELECT
+        b.MAS_CODE          As "masterCode",        -- 마스터코드
+        b.MAS_NAME          As "masterName",        -- 마스터코드 명
+        a.CODE              As "code",              -- 코드
+        a.CODE_NAME         As "codeName",          -- 코드명
+        a.CODE_TYPE         As "codeType",          -- 코드유형
+        a.CODE_DESC         As "codeDesc",          -- 코드설명
+        a.DISP_ORD          As "dispOrder",         -- 정렬순서
+        a.REF1_CODE         As "refCode1",          -- 참조코드1
+        a.REF2_CODE         As "refCode2",          -- 참조코드2
+        a.REF3_CODE         As "refCode3",          -- 참조코드3
+        a.REF4_CODE         As "refCode4",          -- 참조코드4
+        a.REMK              As "remarks",           -- 비고
+        a.USE_YN            As "status",            -- 상태(Y:사용, N:미사용)
+        a.REG_ID            As "regId",             -- 등록자ID
+        (SELECT  USER_NAME
+         FROM    WS_USER_C
+         WHERE   USER_ID = a.REG_ID
+        )                   As "regName",           -- 등록자명
+        a.REG_DATE          As "regDate",           -- 등록일자
+        a.REG_TIME          As "regTime",           -- 등록시간
+        a.MOD_ID            As "modId",             -- 수정자ID
+        a.MOD_DATE          As "modDate",           -- 수정일자
+        a.MOD_TIME          As "modTime"            -- 수정시간
+FROM
+        WS_COMMON_D a,
+        WS_COMMON_M b
+WHERE   1 = 1
+AND     a.SITE_CODE   = $input.siteCode
+AND     a.MAS_CODE    = $input.masterCode
+AND     a.MAS_CODE    = b.MAS_CODE
+AND     a.SITE_CODE   = b.SITE_CODE
+AND     a.USE_YN      = 'Y'
+ORDER BY a.DISP_ORD

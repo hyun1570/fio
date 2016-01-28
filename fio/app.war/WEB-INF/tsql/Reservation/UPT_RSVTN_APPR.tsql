@@ -1,0 +1,6 @@
+UPDATE TA_VSIT_RSVTN_M SET
+	APPR_STATUS = $input.apprStatus,
+	APPR_REMARK = $input.apprRemark,
+	APPR_DATE   = TO_CHAR(SYSDATE, 'YYYYMMDD'),
+	APPR_TIME   = TO_CHAR(SYSDATE, 'HH24MISS')
+WHERE VSIT_RSVTN_M_ID = $input.vsitRsvtnMId

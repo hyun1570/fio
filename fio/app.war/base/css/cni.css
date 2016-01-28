@@ -1,0 +1,28 @@
+@CHARSET "UTF-8";
+body {
+	SCROLLBAR-FACE-COLOR: #cfcfcf; 
+    SCROLLBAR-SHADOW-COLOR: #595959; 
+    SCROLLBAR-3DLIGHT-COLOR: #595959; 
+    SCROLLBAR-ARROW-COLOR: #ffffff; 
+    SCROLLBAR-DARKSHADOW-COLOR: #ffffff;
+    SCROLLBAR-BASE-COLOR: #cfcfcf;
+}
+
+body,td {font-size:9pt; font-family:"돋움"; text-decoration:none; color:#333333; line-height:14px;}
+
+input, select {font-family:"맑은 고딕"}
+          
+img {border: none;}
+
+A:link {
+	font-family: "돋움"; font-size: 9pt; color: #145270; TEXT-DECORATION: none
+}
+A:active {
+	font-family: "돋움"; font-size: 9pt; color: #333333; TEXT-DECORATION: none
+}
+A:visited {
+	font-family: "돋움"; font-size: 9pt; color: #6666666; TEXT-DECORATION: none
+}
+A:hover {
+	font-family: "돋움"; font-size: 9pt; color:: #5B5B5B; TEXT-DECORATION: underline
+}

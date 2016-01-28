@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="euc-kr"?>
+<FrameConfig xsi:noNamespaceSchemaLocation="frame.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <FrameList>
+    
+        <!--
+            CP 설정법 :
+            
+            파람리스트에 디폴트로 사용하는 커맨드를 미리 기술해둔다. 현재까지 반드시 세팅해야할 것들은 다음과 같다.
+            
+            CMD_NULL        : 요청에 커맨드 자체가 없는 경우
+            CMD_NOFOUND     : 커맨드는 있었으나 메타에 없을 경우
+            MULTIPART-FIELD-ENCODING : 멀티파트 처리시 필드 인코딩
+        
+        -->
+        <Frame name="CP" using="true" >
+            <LoggerName>FMB-CP</LoggerName>
+            <!--  1.9.5 버전 이후로는 SynchronizedCommandProcess 를 사용하지 않아도 된다.
+                  개발모드일때 자동적으로 모든 FMB에 대한 동기화처리가 된다.
+            -->
+            <ClassName>com.cni.fw.web.fmb.cp.CommandProcess</ClassName>
+            <ParamList>
+                <Param name="CMD_NULL">NO_CMD</Param>
+                <Param name="CMD_NOFOUND">NO_CMD</Param>
+            </ParamList>
+        </Frame>
+        
+        <!--
+            SP 설정법 :
+            
+            SP 는 파람리스트의 SESSION_KEY 및 SESSION_OBJECT(com.cni.fw.web.session.so.CommonSession 반드시 상속) 를 사용하여 
+            세션데이타를 읽거나 쓰는 기능을 수행한다.
+            제공되는 세션처리을 변경하려면 FMB 자체를 커스터마이징 하거나, 파람리스트에 SESSION_PROCESSOR 키를 추가하여 신규생성한 클래스를 지정한다.
+            
+            SESSION_KEY     : 세션오브젝트에 대한 KEY
+            SESSION_NOFOUND : 세션이 필요한 서비스에서 세션정보가 없을 경우 강제 변경되는 커맨드.
+            
+            com.cni.fw.web.fmb.sm.SessionProcess : WAS에 의해 세션컨텐츠가 관리됨. (SessionWatcher를 사용하지 않아도 됨)
+            com.cni.fw.web.fmb.sm.RepositoryBasedSessionProcess : DAFrame에 의해 세션컨텐츠가 관리됨 (SessionWatcher 사용 필수)
+        
+        -->
+        <Frame name="SP" using="true" >
+            <LoggerName>FMB-SP</LoggerName>
+            <ClassName>com.cni.fw.web.fmb.sm.SessionProcess</ClassName>
+            <ParamList>
+                <Param name="SESSION_KEY">DDE_SESSION</Param>
+                <Param name="SESSION_OBJECT">com.cni.fw.made.web.session.SessionSO</Param>
+                <Param name="SESSION_NOFOUND">DDTA001.M04</Param>
+            </ParamList>
+        </Frame>
+        
+        <Frame name="SP" using="false" >
+            <LoggerName>FMB-SP</LoggerName>
+            <ClassName>com.cni.fw.web.fmb.sm.CustomSessionProcess</ClassName>
+            <ParamList>
+                <Param name="SESSION_KEY">CNI_SESSION_CONTEXT_KEY</Param>
+                <Param name="SESSION_OBJECT">ex.session.ExSession</Param>
+                <Param name="SESSION_NOFOUND">NO_SESSION</Param>
+            </ParamList>
+        </Frame>
+        
+        <Frame name="SP" using="false" >
+            <LoggerName>FMB-SP</LoggerName>
+            <ClassName>com.cni.fw.web.fmb.sm.RepositoryBasedSessionProcess</ClassName>
+            <ParamList>
+                <Param name="SESSION_NOFOUND">NO_SESSION</Param>
+                <Param name="SESSION_PEPOSITORY_CLASS">com.cni.fw.web.session.repository.SimpleSessionRepository</Param>
+            </ParamList>
+        </Frame>
+        
+        <Frame name="SP" using="false" >
+            <LoggerName>FMB-SP</LoggerName>
+            <ClassName>com.cni.fw.web.fmb.sm.RepositoryBasedSessionProcess</ClassName>
+            <ParamList>
+                <Param name="SESSION_NOFOUND">NO_SESSION</Param>
+                <Param name="SESSION_PEPOSITORY_CLASS">com.cni.fw.web.session.repository.FileBasedSessionRepository</Param>
+                <Param name="SESSION_PEPOSITORY_PATH">/var/daframe-session/</Param>
+            </ParamList>
+        </Frame>
+        
+        <!--
+            DS [DummySession] 설정법 :
+            
+            DS는 개발시 유용한 FMB로 강제로 더미 세션을 발생시키는 역할을 담당한다.
+            본 FMB가 활성화 되면 최초 서비스 요청시 반드시 로그인이 실행되며, ParamList에 정의된
+            형태의 세션값들을 보유하게 된다. 
+            
+            이때 userid 라는 키워드로 설정할 경우 별도로 프레임워크 해당 ID를 관리할 수 있게 된다.
+        
+        -->
+        <Frame name="DS" using="false" >
+            <LoggerName>FMB-DS</LoggerName>
+            <ClassName>com.cni.fw.web.fmb.sm.DummySessionProcess</ClassName>
+            <ParamList>
+                <Param name="userid">mute</Param>
+                <Param name="name">전찬모</Param>
+                <Param name="age">30</Param>
+                <Param name="address">서울강남삼성동</Param>
+                <Param name="corp">동부CNI</Param>
+            </ParamList>
+        </Frame>
+        
+        
+        <!--
+            IP 설정법 :
+        
+            Param의 값에는 기본적으로 제공되는 SMB 추상 클래스인 WebControl을 상속하여 각 채널별로 구현한
+            클래스명을 기재하며, name의 경우는 자유롭게 수정할 수 있음
+            
+            MADE-SET :
+                WEB         : com.cni.fw.made.web.cc.ip.IPW001CC (단순 웹리퀘스트 처리 - 통상처리용) 
+                AJAX        : com.cni.fw.made.web.cc.ip.IPA001CC (단순 웹리퀘스트 처리 - AJAX용) 
+                WEB-CHK-ADM : com.cni.fw.made.web.cc.ip.IPW002CC (단순 웹리퀘스트 처리 - IP제약용) 
+                WEB-CHK-DUP : com.cni.fw.made.web.cc.ip.IPW003CC (단순 웹리퀘스트 처리 - 중복입력방지용) 
+                FILE        : com.cni.fw.made.web.cc.ip.IPF001CC (멀티파트 웹리퀘스트)
+                FILE-AJAX   : com.cni.fw.made.web.cc.ip.IPA002CC (멀티파트 웹리퀘스트-AJAX용)
+                
+                WEB-LTO     : com.cni.fw.mci.web.IpWebLtoType01CC (WEB 채널 개량형, LTO 입력 지원)
+                AJAX-LTO    : com.cni.fw.mci.web.IpAjaxLtoType01CC (WEB-LTO의 AJAX타입)
+                
+                GAUCE       : com.cni.fw.made.web.cc.ip.IPX002CC (가우스 4)
+                XML         : com.cni.fw.made.web.cc.ip.IPX001CC (통상 XML 입력 및 플랙스 2)
+                
+                *WEB-LTO 및 AJAX-LTO 사용법
+                
+                테이블성 파라메타들을 아래의 예약 파라메타들과 함께 보내면 해당 정보를 사용해 LTO를 input에 등록한다.
+                
+                 * 예약 파라메타 들은 아래와 같다.
+                 * 1. LTO_NAME : <전달할 LTO 이름, default : "INPUT_LTO"> *선택*
+                 * 2. LTO_HEADER (Array) : <전달할 LTO에 대한 헤더 컬럼Key List> *필수*
+                 * 3. LTO_CUD_FLAG : (Array) : <전달할 LTO에 대한 로우별 CUD Flag List> *선택*
+                
+        -->
+        <Frame name="IP" using="true" >
+            <LoggerName>FMB-IP</LoggerName>
+            <ClassName>com.cni.fw.web.fmb.iop.InputProcess</ClassName>
+            <ParamList>
+                <Param name="X"></Param>
+                <Param name="WEB">com.cni.fw.made.web.cc.ip.IPW001CC</Param>
+                <Param name="AJAX">com.cni.fw.made.web.cc.ip.IPA001CC</Param>
+                <Param name="WEB-CHK-ADM">com.cni.fw.made.web.cc.ip.IPW002CC</Param>
+                <Param name="WEB-CHK-DUP">com.cni.fw.made.web.cc.ip.IPW003CC</Param>
+                <Param name="FILE">com.cni.fw.made.web.cc.ip.IPF001CC</Param>
+                <Param name="FILE2">com.ddta.base.service.IPFileUpload</Param>
+                <Param name="FILE-AJAX">com.cni.fw.made.web.cc.ip.IPA002CC</Param>
+                <Param name="XML">com.cni.fw.made.web.cc.ip.IPX001CC</Param>
+                <Param name="WEB-LTO">com.cni.fw.mci.web.IpWebLtoType01CC</Param>
+                <Param name="AJAX-LTO">com.cni.fw.mci.web.IpAjaxLtoType01CC</Param>
+                <Param name="WISE">com.daframe.mci.cc.ip.IPWISE003CC</Param>
+            </ParamList>
+        </Frame>        
+        
+        
+        
+        <!--
+           FMB Example :
+           아래의 예시와 같이 설정하고 본 주석란에 자세한 설명을 기재한다.
+        -->
+        <Frame name="EX" using="false" >
+            <LoggerName>FMB-EX</LoggerName>
+            <ClassName>ex.fc.fmb.ExtraProcess</ClassName>
+            <ParamList>
+                <Param name="ParamKey">ParamValue</Param>
+            </ParamList>
+        </Frame>
+
+        <!--
+            TM 설정법 :
+        
+            Param의 값에는 기본적으로 제공되는 SMB 추상 클래스를 아래와 같이 사용하며, name의 경우는 자유롭게 수정할 수 있음
+            
+            INPUT-LOG : true로 설정할 경우 자동적으로 TM 처리시 input 로그를 debug로 출력한다.
+            
+            Redirect : : 단순 URL 리다이렉트시 사용한다.                
+            NA  : com.cni.fw.arch.smb.ac.BasicService : 기본 서비스, 아무런 자원이나 트랜잭션 제어에 프레임워크가 관여하지 않는다.
+            Tx  : com.cni.fw.arch.smb.ac.NormalTxService : 전형적인 DB 트랜잭션형 서비스
+            Tx2 : com.cni.fw.arch.smb.ac.ThreadSafeTxService : Tx의 개량형으로 오브젝트 캐쉬를 지원한다.
+            SAP : com.cni.fw.arch.smb.ac.SapTxService : Tx에 SAP 커낵션까지 제공하는 확장형 서비스
+            
+            Param의 값이 SKIP일 경우 어떤 AC도 사용하지 않겠다는 의미이며, 즉 단순 페이지전환시 사용한다.
+        -->
+        <Frame name="TM" using="true" >
+            <LoggerName>FMB-TM</LoggerName>
+            <ClassName>com.cni.fw.web.fmb.tm.TransactionManagement</ClassName>
+            <ParamList>
+                <Param name="INPUT-LOG">true</Param>
+                <Param name="Redirect">SKIP</Param>
+                <Param name="Page">SKIP</Param>
+                <Param name="NA">com.cni.fw.arch.smb.ac.BasicService</Param>
+                <Param name="Tx">com.cni.fw.arch.smb.ac.NormalTxService</Param>
+                <Param name="Tx2">com.cni.fw.arch.smb.ac.ThreadSafeTxService</Param>
+                <Param name="SAP">com.cni.fw.arch.smb.ac.SapTxService</Param>
+            </ParamList>
+        </Frame>
+        
+        
+        
+        <!--
+            SM 설정법 :
+            
+            SM 은 파람리스트의 SESSION_KEY 및 SESSION_OBJECT(com.cni.fw.web.session.so.CommonSession 반드시 상속) 를 사용하여 
+            세션데이타를 읽거나 쓰는 기능을 수행한다.
+            제공되는 세션처리을 변경하려면 FMB 자체를 커스터마이징 하거나, 파람리스트에 SESSION_MANAGER 키를 추가하여 신규생성한 클래스를 지정한다.
+            
+            com.cni.fw.web.fmb.sm.SessionManagement : WAS에 의해 세션컨텐츠가 관리됨. (SessionWatcher를 사용하지 않아도 됨)
+            com.cni.fw.web.fmb.sm.RepositoryBasedSessionManagement : DAFrame에 의해 세션컨텐츠가 관리됨 (SessionWatcher 사용 필수)
+        
+        -->
+        <Frame name="SM" using="true" >
+            <LoggerName>FMB-SM</LoggerName>
+            <ClassName>com.cni.fw.web.fmb.sm.SessionManagement</ClassName>
+            <ParamList>
+                <Param name="SESSION_KEY">DDE_SESSION</Param>
+                <Param name="SESSION_OBJECT">com.cni.fw.made.web.session.SessionSO</Param>
+                <Param name="SESSION_MANAGER">com.cni.fw.made.web.cc.sm.SMS001CC</Param>
+            </ParamList>
+        </Frame>
+        
+        <Frame name="SM" using="false" >
+            <LoggerName>FMB-SP</LoggerName>
+            <ClassName>com.cni.fw.web.fmb.sm.CustomSessionManagement</ClassName>
+            <ParamList>
+                <Param name="SESSION_KEY">CNI_SESSION_CONTEXT_KEY</Param>
+                <Param name="SESSION_OBJECT">ex.session.ExSession</Param>
+                <Param name="SESSION_NOFOUND">NO_SESSION</Param>
+            </ParamList>
+        </Frame>
+        
+        <Frame name="SM" using="false" >
+            <LoggerName>FMB-SM</LoggerName>
+            <ClassName>com.cni.fw.web.fmb.sm.RepositoryBasedSessionManagement</ClassName>
+            <ParamList>
+                <Param name="SESSION_NOFOUND">NO_SESSION</Param>
+                <Param name="SESSION_PEPOSITORY_CLASS">com.cni.fw.web.session.repository.SimpleSessionRepository</Param>
+            </ParamList>
+        </Frame>
+        
+        <Frame name="SM" using="false" >
+            <LoggerName>FMB-SM</LoggerName>
+            <ClassName>com.cni.fw.web.fmb.sm.RepositoryBasedSessionManagement</ClassName>
+            <ParamList>
+                <Param name="SESSION_NOFOUND">NO_SESSION</Param>
+                <Param name="SESSION_PEPOSITORY_CLASS">com.cni.fw.web.session.repository.FileBasedSessionRepository</Param>
+                <Param name="SESSION_PEPOSITORY_PATH">/var/daframe-session/</Param>
+            </ParamList>
+        </Frame>
+        
+        <!-- PC (page checker) 
+             PC 설정접 : 현재 별다른 옵션 없음
+        -->
+        
+        <Frame name="PC" using="true" >
+            <LoggerName>FMB-PC</LoggerName>
+            <ClassName>com.base.check.PageChecker</ClassName>
+        </Frame>
+        
+        <!--
+            OP 설정법 :
+        
+            Param의 값에는 기본적으로 제공되는 SMB 추상 클래스인 WebControl을 상속하여 각 채널별로 구현한
+            클래스명을 기재하며, name의 경우는 자유롭게 수정할 수 있음
+            
+            API 동작 설정
+                SECOND-COMMAND  : 특정API(setSecondCommand)에 의해 사용되는 FMB 연계 (*PARAM 키 변경 불가*)
+            PREPARE-SET
+                BRANCH          : 메타 지정에 의한 분기방식, 지정한 FMB로 연계, TX 연동안됨 (*PARAM 키 변경 불가*)
+                BRANCH-TX       : BRANCH 옵션사항, UserTransaction TX 객체를  지정한 FMB로 연동 (*PARAM 키 변경 불가*)
+                CHAINED         : 메타 지정에 의한 연계방식, 지정한 FMB로 연계, TX 연동안됨 (*PARAM 키 변경 불가*)
+                CHAINED-TX      : CHAINED 옵션사항, UserTransaction TX 객체를  지정한 FMB로 연동 (*PARAM 키 변경 불가*)
+                
+             MADE-SET :
+                JSP             : com.cni.fw.made.web.cc.op.IPW001CC (단순 웹리퀘스트 처리 - 통상처리용) 
+                XML             : com.cni.fw.mci.OpXmlType01CC (통상 XML 출력) 
+                JSON            : com.cni.fw.mci.OpJsonType01CC (통상 JSON 출력)
+                FILE            : com.cni.fw.made.web.cc.op.OPF001CC (일반 파일 다운로드)
+                EXCEL           : com.cni.fw.made.web.cc.op.OPXLS001CC (엑셀 파일 익스포트)
+                TFORM           : com.cni.fw.made.web.cc.op.OPX001CC (RIA, 트러스트폼 4)
+                GAUCE           : com.cni.fw.made.web.cc.op.OPX002CC (RIA, 가우스 4)
+                WISE            : com.daframe.mci.cc.op.OPWISE003CC (GRID, 와이즈)
+                WBSL            : com.ddw.fw.wrap.SMLoginWebBase (Web Base Session Login)
+                REAL            : com.ddw.fw.wrap.OPREAL001CC (GRID Real Grid+)
+                TXM             : com.ddta.base.wrap.TxMulti (Multi Sql Execute)
+        -->
+        <Frame name="OP" using="true" >
+            <LoggerName>FMB-OP</LoggerName>
+            <ClassName>com.cni.fw.web.fmb.iop.OutputProcess</ClassName>
+            <ParamList>
+                <Param name="X"></Param>
+                <Param name="SECOND-COMMAND">TM</Param>
+                <Param name="CHAINED">TM</Param>
+                <Param name="CHAINED-TX">TM</Param>
+                <Param name="BRANCH">TM</Param>
+                <Param name="BRANCH-TX">TM</Param>
+                <Param name="TXM">com.ddta.base.wrap.TxMulti</Param>
+                <Param name="TXM2">com.ddta.base.service.MultiService</Param>
+                <Param name="JSON">com.cni.fw.mci.OpJsonType01CC</Param>
+                <Param name="JSON2">com.ddta.base.wrap.OPCustomJson</Param>
+                <Param name="JSP">com.cni.fw.made.web.cc.op.OPW001CC</Param>
+                <Param name="XML">com.cni.fw.mci.OpXmlType01CC</Param>
+                <Param name="WBSL">com.ddta.base.wrap.LoginSession</Param>
+                <Param name="REAL">com.ddta.base.wrap.HandlerSupport</Param>
+                <Param name="FILE">com.cni.fw.made.web.cc.op.OPF001CC</Param>
+                <Param name="FILE2">com.ddta.base.service.OPFileDownLoad</Param>
+                <Param name="EXCEL">com.cni.fw.made.web.cc.op.OPXLS001CC</Param>
+                <Param name="WISE">com.daframe.mci.cc.op.OPWISE003CC</Param>
+            </ParamList>
+        </Frame>
+        
+        <!-- 
+            PP 설정법 :
+            
+            현재 별다른 옵션 없음.
+        -->
+        <Frame name="PP" using="true" >
+            <LoggerName>FMB-PP</LoggerName>
+            <ClassName>com.cni.fw.web.fmb.pp.PageProcess</ClassName>
+        </Frame>
+        
+        <!-- 
+            RC 설정법 :
+            
+            현재 별다른 옵션 없음.
+        -->
+        
+        
+    </FrameList>
+</FrameConfig>

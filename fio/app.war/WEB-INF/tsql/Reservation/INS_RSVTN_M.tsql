@@ -1,0 +1,46 @@
+INSERT INTO TA_VSIT_RSVTN_M
+(
+	VSIT_RSVTN_M_ID,
+	VSIT_RSVTN_NO,
+	BP_CODE,
+	DEPT_CODE,
+	FACT_CODE,
+	INTV_USER_ID,
+	INTV_USER_TEL,
+	INTV_USER_MAIL,
+	VSIT_CODE,
+	VSIT_RSVTN_FROM_DATE,
+	VSIT_RSVTN_TO_DATE,
+	VSIT_RSVTN_ST_TIME,
+	VSIT_RSVTN_ED_TIME,
+	ETC,
+	ACCEPT_CODE,
+	VSIT_PROD_YN,
+	VSIT_GRUP_YN,
+	APPR_STATUS,
+	REG_DATE,
+	REG_TIME
+)
+VALUES
+(
+	(TA_VSIT_RSVTN_M_SEQ.NEXTVAL),
+	$input.vsitRsvtnNo,
+	$input.bpCode,
+	$input.deptCode,
+	$input.factCode,
+	$input.intvUserId,
+	$input.intvUserTel,
+	$input.intvUserMail,
+	$input.vsitCode,
+	$input.vsitRsvtnFromDate,
+	$input.vsitRsvtnToDate,
+	$input.vsitRsvtnStTime,
+	$input.vsitRsvtnEdTime,
+	$input.etc,
+	dbms_random.string('X', 10),
+	$input.vsitProdYn,
+	$input.vsitGrupYn,
+	'N',
+	TO_CHAR(SYSDATE, 'YYYYMMDD'),
+	TO_CHAR(SYSDATE, 'HH24MISS')
+)

@@ -1,0 +1,64 @@
+SELECT
+        ROWNUM         As "no",
+        BBS_ID          As "bbsId",
+        FILE_ATCH_ID    As "fileAtchId",
+        BBS_TYPE        As "bbsType",
+        SITE_CODE       As "siteCode",
+        BRAN_CODE       As "branCode",
+        NOTI_TYPE       As "notiType",
+        (SELECT  CODE_NAME
+         FROM    WS_COMMON_D
+         WHERE   SITE_CODE   = '10003'
+     AND     MAS_CODE    = 'NOTICE_TYPE'
+     AND     CODE        = Z.NOTI_TYPE
+    )               As "notiTypeNm",
+    TOP_VIEW_YN     As "topViewYn",
+    TITL            As "titl",
+    CTNT            As "ctnt",
+    HIT_CNT         As "hitCnt",
+    EMAL            As "emal",
+    TEL_NO          As "telNo",
+    PWD             As "pwd",
+    RE_REF_BBS_ID   As "reRefBbsId",
+    RE_DEPS         As "reDeps",
+    RE_ORD          As "reOrd",
+    USE_YN          As "useYn",
+    LANG_TYPE       As "langType",
+    REG_ID          As "regId",
+    (SELECT  USER_NAME
+    FROM    WS_USER_C
+    WHERE   USER_ID = Z.REG_ID
+    )               As "regName",
+    REG_DATE        As "regDate",
+    REG_TIME        As "regTime",
+    MOD_ID          As "modId",
+    (SELECT  USER_NAME
+    FROM    WS_USER_C
+    WHERE   USER_ID = Z.MOD_ID
+    )               As "modName",
+    MOD_DATE        As "modDate",
+    MOD_TIME        As "modTime"
+FROM    WS_BOARD_Z Z
+WHERE USE_YN = 'Y' 
+AND BBS_TYPE = $input.bbsType
+AND SITE_CODE = $input.siteCode
+
+#if( $input.fetch("sType") == "title")
+    #if($input.isEmpty("sTypeNm"))
+    #else
+    AND TITL LIKE '%'|| $input.sTypeNm || '%'
+    #end
+#end
+#if( $input.fetch("sType") == "content")
+#if($input.isEmpty("sTypeNm"))
+#else
+AND CTNT LIKE '%'|| $input.sTypeNm || '%'
+#end
+#end
+#if( $input.fetch("sType") == "regName")
+#if($input.isEmpty("sTypeNm"))
+#else
+AND REG_ID IN (SELECT USER_ID FROM WS_USER_C_NEW LIKE '%'|| $input.sTypeNm || '%'
+#end
+#end
+ORDER BY Z.NOTI_TYPE DESC, TO_NUMBER(Z.REG_DATE) DESC, TO_NUMBER(Z.REG_TIME) DESC, ROWNUM DESC

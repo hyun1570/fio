@@ -1,0 +1,26 @@
+## 공지사항 수정
+
+UPDATE
+        WS_BOARD_Z
+SET     
+        BBS_TYPE           = $input.boardType,
+        SITE_CODE          = $input.siteCode,
+        BRAN_CODE          = $input.branchCode,
+        NOTI_TYPE          = $input.noticeType,
+        LANG_TYPE          = $input.languageType,
+        TOP_VIEW_YN        = $input.topViewYn,
+        TITL               = $input.title,
+        CTNT               = $input.contents,
+        HIT_CNT            = $input.hitCount,
+        EMAL               = $input.eMail,
+        TEL_NO             = $input.telNo,
+        PWD                = $input.password,
+        RE_REF_BBS_ID      = $input.replyRefBoardId,
+        RE_DEPS            = $input.replyDepth,
+        RE_ORD             = $input.replyOrder,
+        USE_YN             = $input.status,
+        MOD_ID             = $input.modId,
+        MOD_DATE           = TO_CHAR(sysDate, 'YYYYMMDD'),
+        MOD_TIME           = TO_CHAR(sysDate, 'HH24MISS')
+WHERE   1 = 1
+AND     BBS_ID = $input.boardId

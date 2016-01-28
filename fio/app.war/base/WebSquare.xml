@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:w2="http://www.inswave.com/websquare" xmlns:xf="http://www.w3.org/2002/xforms">
+    <head>
+        <w2:buildDate/>
+        <xf:model>
+            <xf:instance>
+                <data xmlns=""/>
+            </xf:instance>
+        </xf:model>
+        <script type="javascript"><![CDATA[ ]]></script>
+    </head>
+    <body>
+    	<w2:grid baseNode="vector" repeatNode="data/INFO" id="grid2"
+    		style="position: absolute ;left: 106px;top: 164px;width: 669px;height: 331px;">
+    		<w2:header id="header1" style="">
+    			<w2:row id="row1" style="">
+    				<w2:column id="column19" style="height:20px"
+    					inputType="text" width="70">
+    				</w2:column>
+    				<w2:column id="column17" style="height:20px"
+    					inputType="text" width="70">
+    				</w2:column>
+    				<w2:column id="column15" style="height:20px"
+    					inputType="text" width="70">
+    				</w2:column>
+    				<w2:column id="column13" style="height:20px"
+    					inputType="text" width="70">
+    				</w2:column>
+    				<w2:column id="column11" style="height:20px"
+    					inputType="text" width="70">
+    				</w2:column>
+    				<w2:column id="column9" style="height:20px"
+    					inputType="text" width="70">
+    				</w2:column>
+    				<w2:column id="column7" style="height:20px"
+    					inputType="text" width="70">
+    				</w2:column>
+    				<w2:column id="column5" style="height:20px"
+    					inputType="text" width="70">
+    				</w2:column>
+    				<w2:column id="column3" style="height:20px"
+    					inputType="text" width="70">
+    				</w2:column>
+    				<w2:column id="column1" style="height:20px"
+    					width="70" inputType="text">
+    				</w2:column>
+    			</w2:row>
+    		</w2:header>
+    		<w2:gBody id="gBody1" style="">
+    			<w2:row id="row2" style="">
+    				<w2:column id="column20" style="height:20px"
+    					inputType="text" width="70">
+    				</w2:column>
+    				<w2:column id="column18" style="height:20px"
+    					inputType="text" width="70">
+    				</w2:column>
+    				<w2:column id="column16" style="height:20px"
+    					inputType="text" width="70">
+    				</w2:column>
+    				<w2:column id="column14" style="height:20px"
+    					inputType="text" width="70">
+    				</w2:column>
+    				<w2:column id="column12" style="height:20px"
+    					inputType="text" width="70">
+    				</w2:column>
+    				<w2:column id="column10" style="height:20px"
+    					inputType="text" width="70">
+    				</w2:column>
+    				<w2:column id="column8" style="height:20px"
+    					inputType="text" width="70">
+    				</w2:column>
+    				<w2:column id="column6" style="height:20px"
+    					inputType="text" width="70">
+    				</w2:column>
+    				<w2:column id="column4" style="height:20px"
+    					inputType="text" width="70">
+    				</w2:column>
+    				<w2:column id="column2" style="height:20px"
+    					width="70" inputType="text">
+    				</w2:column>
+    			</w2:row>
+    		</w2:gBody>
+    	</w2:grid>
+    	<xf:trigger type="button" id="trigger1"
+    		style="position: absolute ;left:644px;top:118px;width: 125px;height: 33px;">
+    		<xf:label>조회</xf:label>
+    		<script ev:event="onclick" type="javascript"><![CDATA[ ]]></script>
+    	</xf:trigger>
+    </body>
+</html>

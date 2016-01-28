@@ -1,0 +1,98 @@
+ SELECT 
+        TO_CHAR(SYSDATE, 'YYYYMMDD')    As "vsitDate",
+        MNG.VSIT_MNG_R_ID               As "vsitMngRId",
+        RSVTN.VSIT_RSVTN_M_ID           As "vsitRsvtnMId",
+        RSVTN.VSIT_RSVTN_D_ID           As "vsitRsvtnDId",
+        RSVTN.VSIT_RSVTN_NO             As "vsitRsvtnNo",
+        RSVTN.VNUM                      As "vnum",    
+        MNG.STRG_NO                     As "strgNo",
+        MNG.IN_GATE                     As "inGate",
+        (
+         SELECT USER_NAME
+           FROM WS_USER_C
+          WHERE USER_ID = MNG.IN_GATE
+        )                               As "inGateNm",
+        MNG.IN_TIME                     As "inTime",
+        MNG.OUT_GATE                    As "outGate",
+        (
+         SELECT USER_NAME
+           FROM WS_USER_C
+          WHERE USER_ID = MNG.OUT_GATE
+        )                               As "outGateNm",
+        MNG.OUT_TIME                    As "outTime",
+        RSVTN.VSIT_USER_NM              As "vsitUserNm",
+        RSVTN.VSIT_USER_TEL             As "vsitUserTel",
+        RSVTN.VSIT_COMP_NAME            As "vsitCompName",
+        RSVTN.VSIT_CODE                 As "vsitCode",
+        RSVTN.VSIT_CODE_NAME            As "vsitCodeName",
+        RSVTN.DEPT_CODE                 As "deptCode",
+        RSVTN.DEPT_NAME                 As "deptName",
+        RSVTN.INTV_USER_ID              As "intvUserId",
+        RSVTN.INTV_USER_NAME            As "intvUserName",
+        RSVTN.INTV_USER_TEL             As "intvUserTel",
+        MNG.ETC                         As "etc", 
+        NVL(MNG.IO_STAT, 'N')           As "ioStat"
+   FROM (SELECT * 
+           FROM TA_VSIT_MNG_RSVTN_Z 
+          WHERE VSIT_DATE   = TO_CHAR(SYSDATE, 'YYYYMMDD')
+        )   MNG,
+        (
+         SELECT 
+                M.VSIT_RSVTN_M_ID      As "VSIT_RSVTN_M_ID",
+                D.VSIT_RSVTN_D_ID      As "VSIT_RSVTN_D_ID",
+                M.VSIT_RSVTN_NO        As "VSIT_RSVTN_NO",
+                M.BP_CODE              As "BP_CODE",
+                M.DEPT_CODE            As "DEPT_CODE",
+                (SELECT DEPT_NAME                 
+                   FROM COMM_DEPT_INFO@COMM_DB
+                  WHERE DEPT_CODE = M.DEPT_CODE
+                )                      As "DEPT_NAME",
+                M.INTV_USER_ID         As "INTV_USER_ID",
+                (SELECT KNAME
+                   FROM COMM_EMP_INFO@COMM_DB
+                  WHERE SNO = M.INTV_USER_ID
+                )                      As "INTV_USER_NAME",
+                M.INTV_USER_TEL        As "INTV_USER_TEL",
+                M.INTV_USER_MAIL       As "INTV_USER_MAIL",
+                M.VSIT_CODE            As "VSIT_CODE",
+                (SELECT CODE_NAME
+                   FROM WS_COMMON_D
+                  WHERE MAS_CODE= 'EPUPS'
+                    AND CODE    = M.VSIT_CODE
+                )                      As "VSIT_CODE_NAME",
+                M.VSIT_RSVTN_FROM_DATE As "VSIT_RSVTN_FROM_DATE",
+                M.VSIT_RSVTN_TO_DATE   As "VSIT_RSVTN_TO_DATE",
+                M.VSIT_RSVTN_ST_TIME   As "VSIT_RSVTN_ST_TIME",
+                M.VSIT_RSVTN_ED_TIME   As "VSIT_RSVTN_ED_TIME",
+                M.VSIT_PROD_YN         As "VSIT_PROD_YN",
+                M.VSIT_GRUP_YN         As "VSIT_GRUP_YN",
+                D.VNUM                 As "VNUM",
+                D.VSIT_COMP_NAME       As "VSIT_COMP_NAME",
+                D.VSIT_USER_NM         As "VSIT_USER_NM",
+                D.VSIT_USER_TEL        As "VSIT_USER_TEL",
+                D.VSIT_USER_MAIL       As "VSIT_USER_MAIL"
+           FROM TA_VSIT_RSVTN_M M, TA_VSIT_RSVTN_D D
+          WHERE M.VSIT_RSVTN_M_ID = D.VSIT_RSVTN_M_ID(+)
+            AND M.APPR_STATUS = 'A'
+            AND M.BP_CODE  = $input.bpCode
+            AND TO_NUMBER(TO_CHAR(SYSDATE, 'YYYYMMDD')) 
+                    BETWEEN TO_NUMBER(M.VSIT_RSVTN_FROM_DATE) 
+                        AND TO_NUMBER(M.VSIT_RSVTN_TO_DATE)
+        ) RSVTN
+  WHERE MNG.VSIT_RSVTN_M_ID(+) = RSVTN.VSIT_RSVTN_M_ID
+    AND MNG.VSIT_RSVTN_D_ID(+) = RSVTN.VSIT_RSVTN_D_ID
+#if( $input.fetch("sType") == "sVsitUserNm")
+    #if($input.isEmpty("sTypeNm"))
+    #else
+    AND UPPER(RSVTN.VSIT_USER_NM) LIKE '%'|| UPPER($input.sTypeNm) ||'%'
+    #end
+#elseif( $input.fetch("sType") == "sVsitRegNo")
+    #if($input.isEmpty("sTypeNm"))
+    #else
+    AND UPPER(RSVTN.VSIT_RSVTN_NO) LIKE '%'|| UPPER($input.sTypeNm) ||'%'
+    #end    
+#end
+#if( $input.fetch("procEndYn") == "Y")
+    AND NVL(MNG.IO_STAT, 'N') != 'O'
+#end
+ORDER BY RSVTN.VSIT_RSVTN_M_ID, RSVTN.VNUM

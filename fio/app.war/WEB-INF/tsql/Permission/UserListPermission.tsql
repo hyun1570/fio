@@ -1,0 +1,27 @@
+#*
+  사용자 목록 권한
+*#
+SELECT UR.USER_ROLE_ID        As "userRoleId",
+        US.USER_ID             As "userId",
+        US.USER_NAME           As "userName",
+        RO.ROLE_ID             As "roleId",
+        RO.ROLE_NAME           As "roleName",
+        ORG.ORG_NAME  As "organizationName"
+FROM WS_USER_ROLE_C UR,
+      WS_ROLE_C RO,
+      WS_USER_C US,
+      WS_ORGANIZATION_C ORG
+WHERE RO.ROLE_ID            = UR.ROLE_ID 
+  AND UR.USER_ID            = US.USER_ID
+  AND ORG.CORP_ID           = US.CORP_ID
+  AND ORG.BIZ_PLAC_ID       = US.BIZ_PLAC_ID
+  AND ORG.ORG_ID            = US.ORG_ID
+#if ($input.isContain("userId"))
+    AND US.USER_ID            = $input.userId
+#end  
+  
+#if ($input.isContain("siteId"))
+    AND RO.SITE_ID = $input.siteId
+#end
+  AND UR.USE_YN             = 'Y'
+ORDER BY RO.ROLE_ID

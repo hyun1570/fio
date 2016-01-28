@@ -1,0 +1,55 @@
+#*
+  프로그램 액션 VIEW
+*#
+WITH T AS (
+    SELECT (ListAgg(PGM_ACTION, ',') WITHIN GROUP(ORDER BY rownum)) STR
+    FROM WS_PROGRAM_C PG,
+        WS_USER_ROLE_PROGRAM_C RP,
+        WS_USER_ROLE_C UR,
+        WS_SITE_C ST
+    WHERE RP.PGM_ID = PG.PGM_ID
+        AND UR.ROLE_ID = RP.ROLE_ID
+        AND ST.SITE_ID = UR.SITE_ID
+        AND ST.SITE_CODE =$input.siteCode
+        AND UR.USER_ID = $input.userId
+        AND PG.MENU_ID = $input.menuId
+        AND RP.USE_YN  = 'Y'
+        AND PG.USE_YN  = 'Y'
+        AND UR.USE_YN  = 'Y'
+    GROUP BY RP.PGM_ID
+)
+#*
+  프로그램 액션 VIEW 의 중복을 제거
+*#
+SELECT LISTAGG(ACT, ',') WITHIN GROUP (ORDER BY ROWNUM) As "grants"
+FROM ( SELECT  STR, MIN(RN),(SELECT ACT_NAME ||'|' || ACT_ID FROM WS_PROGRAM_ACTION WHERE ACT_SEQ = STR) As ACT
+            FROM ( SELECT REGEXP_SUBSTR(STR, '[^,]+', 1, RN) STR, ROWNUM RN
+                         FROM T
+                  CROSS JOIN ( SELECT ROWNUM RN
+                             FROM ( SELECT MAX(LENGTH(REGEXP_REPLACE (STR, '[^,]+')))+1 MX
+                                    FROM  T
+                                  )
+                             CONNECT BY LEVEL <= MX
+                           )
+                WHERE REGEXP_SUBSTR (STR, '[^,]+', 1, RN) IS NOT NULL
+              )
+           GROUP BY STR
+          ORDER BY MIN(RN)
+       )
+#*
+SELECT LISTAGG(STR, ',') WITHIN GROUP (ORDER BY ROWNUM) As "grants"
+FROM ( SELECT  STR, MIN(RN)
+            FROM ( SELECT REGEXP_SUBSTR(STR, '[^,]+', 1, RN) STR, ROWNUM RN
+                         FROM T
+                  CROSS JOIN ( SELECT ROWNUM RN
+                             FROM ( SELECT MAX(LENGTH(REGEXP_REPLACE (STR, '[^,]+')))+1 MX
+                                    FROM  T
+                                  )
+                             CONNECT BY LEVEL <= MX
+                           )
+                WHERE REGEXP_SUBSTR (STR, '[^,]+', 1, RN) IS NOT NULL
+              )
+           GROUP BY STR
+          ORDER BY MIN(RN)
+       )
+*#       

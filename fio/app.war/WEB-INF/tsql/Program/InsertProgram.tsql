@@ -1,0 +1,47 @@
+#*
+  프로그램 목록
+*#
+INSERT INTO WS_PROGRAM_C 
+(
+    PGM_ID, 
+    SITE_ID, 
+    PGM_PNT_ID, 
+    PGM_TYPE, 
+    PGM_NAME, 
+    PGM_DESC, 
+    PGM_PATH, 
+    MENU_ID, 
+    MENU_PNT_ID, 
+    MENU_TYPE, 
+    MENU_ORD, 
+    MENU_OPT, 
+    USE_YN, 
+    REG_ID, 
+    REG_DATE, 
+    REG_TIME, 
+    MOD_ID, 
+    MOD_DATE, 
+    MOD_TIME
+) 
+VALUES
+(
+    WS_PROGRAM_C_SEQ1.NEXTVAL,
+    $input.siteId, 
+    $input.programParentId, 
+    $input.programType, 
+    $input.programName, 
+    $input.programDesc, 
+    $input.programPath, 
+    $input.menuId, 
+    $input.menuParentId, 
+    $input.menuType, 
+    $input.menuOrder,
+    $input.menuOption, 
+    $input.status,  
+    $input.regId,
+    TO_CHAR(sysDate, 'YYYYMMDD'),
+    TO_CHAR(sysDate, 'HH24MISS'),
+    $input.modId,
+    TO_CHAR(sysDate, 'YYYYMMDD'),
+    TO_CHAR(sysDate, 'HH24MISS')
+)

@@ -1,0 +1,48 @@
+SELECT
+		SITE_CODE       As "siteCode",
+		MAS_CODE        As "masCode",
+		CODE            As "code",
+		CODE_NAME       As "codeName",
+		CODE_TYPE       As "codeType",
+		CODE_DESC       As "codeDesc",
+		DISP_ORD        As "dispOrd",
+		REF1_CODE       As "ref1Code",
+		REF2_CODE       As "ref2Code",
+		REF3_CODE       As "ref3Code",
+		REF4_CODE       As "ref4Code",
+		REMK            As "remk",
+		USE_YN          As "useYn",
+		MOD_ID          As "modId",
+		(
+		 SELECT USER_NAME
+		 FROM WS_USER_C_NEW
+		 WHERE USER_ID = D.MOD_ID
+		)               As "modName",
+		MOD_DATE        As "modDate",
+		MOD_TIME        As "modTime"
+FROM    WS_COMMON_D D
+WHERE   1=1
+AND     MAS_CODE = $input.masCode
+#if($input.isEmpty("sSiteCode"))
+#else
+AND SITE_CODE = $input.sSiteCode
+#end
+#if($input.fetch("dSType") == "sCodeName")
+    #if($input.isEmpty("dSTypeNm"))
+    #else
+        AND UPPER(CODE_NAME) like '%'|| UPPER($input.dSTypeNm)||'%'
+    #end
+#elseif($input.fetch("dSType") == "sCode")
+    #if($input.isEmpty("dSTypeNm"))
+    #else
+        AND UPPER(CODE) like '%'|| UPPER($input.dSTypeNm)||'%'
+    #end
+#end
+
+## 사용여부
+#if($input.isEmpty("dUseYn"))
+#else
+AND USE_YN = $input.dUseYn
+#end
+
+ORDER BY DISP_ORD

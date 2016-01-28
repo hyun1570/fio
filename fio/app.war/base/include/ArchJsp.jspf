@@ -1,0 +1,18 @@
+<%@ page extends="com.cni.fw.arch.ArchJsp"%>
+<%@ page import="com.cni.fw.ff.dto.*"%>
+<%@ page import="com.cni.fw.ff.dto.entity.*"%>
+<%@ page import="com.cni.fw.ff.util.maker.*"%>
+<%@ page import="com.cni.fw.ff.dto.support.*"%>
+<%@ page import="com.cni.fw.ff.util.*"%>
+<%@ page import="com.cni.fw.id.*"%>
+<%@ page import="com.cni.fw.web.util.*"%>
+<%@ page import="com.cni.fw.web.session.so.CommonSession"%>
+<%
+    CauseDTO input = getCauseDTO(request);
+    EffectDTO output = getEffectDTO(request);
+    CommonSession cs = null;
+    if (input != null) {
+		cs = input.getCommonSession();
+    }
+    String ctxPath = request.getContextPath();
+%>

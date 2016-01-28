@@ -1,0 +1,41 @@
+#*
+  프로그램 목록
+*#
+SELECT 
+    PR.PGM_ID          As "programId", 
+    PR.SITE_ID         As "siteId", 
+    PR.PGM_PNT_ID      As "programParentId", 
+    PR.PGM_TYPE        As "programType", 
+    PR.PGM_NAME        As "programName", 
+    PR.PGM_DESC        As "programDesc", 
+    PR.PGM_PATH        As "programPath", 
+    PR.MENU_ID         As "menuId", 
+    PR.MENU_PNT_ID     As "menuParentId", 
+    PR.MENU_TYPE       As "menuType", 
+    PR.MENU_ORD        As "menuOrder", 
+    (SELECT CODE_NAME
+       FROM WS_COMMON_D
+       WHERE MAS_CODE  = 'USER_TYPE'
+         AND CODE      = PR.MENU_OPT
+         AND SITE_CODE = $input.siteCode
+    )                      As "menuOption", 
+    PR.USE_YN              As "status",
+    (SELECT CASE WHEN COUNT(*) = 0 THEN 'N'
+                   ELSE 'Y'
+             END
+       FROM WS_USER_ROLE_PROGRAM_C
+      WHERE PGM_ID = PR.PGM_ID
+        AND USER_ID IN ((     select regexp_substr($input.roleId,'[^,]+', 1, level) from dual 
+                               connect by regexp_substr($input.roleId, '[^,]+', 1, level) is not null
+                               )
+                              )
+        AND USE_YN = 'Y'
+    )                      As "isRole"
+FROM 
+    WS_PROGRAM_C PR
+WHERE 1 = 1
+#if ($input.isContain("siteId"))
+    AND SITE_ID = $input.siteId
+#end
+AND PR.USE_YN = 'Y'
+ORDER BY MENU_ORD

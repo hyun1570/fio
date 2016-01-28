@@ -1,0 +1,10 @@
+#*
+  프로그램 수정
+*#
+##DELETE WS_PROGRAM_C
+##WHERE  
+##    PGM_ID = $input.programId  
+
+UPDATE WS_PROGRAM_C
+   SET USE_YN = 'N'
+ WHERE PGM_ID = $input.programId

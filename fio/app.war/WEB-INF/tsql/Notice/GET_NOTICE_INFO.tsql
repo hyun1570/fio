@@ -1,0 +1,34 @@
+## 공지사항 상세보기
+
+SELECT
+        BBS_ID                As "boardId",           -- 게시판ID
+        BBS_TYPE              As "boardType",         -- 게시판유형
+        SITE_CODE             As "siteCode",          -- 사이트코드
+        LANG_TYPE             As "languageType",      -- 언어설정
+        BRAN_CODE             As "branchCode",        -- 지점코드
+        NOTI_TYPE             As "noticeType",        -- 공지유형
+        TOP_VIEW_YN           As "topViewYn",         -- 상단노출여부
+        TITL                  As "title",             -- 제목
+        CTNT                  As "contents",          -- 내용
+        HIT_CNT               As "hitCount",          -- 조회수
+        EMAL                  As "eMail",             -- 작성자 이메일
+        TEL_NO                As "telNo",             -- 작성자 전화번호
+        PWD                   As "password",          -- 작성 비밀번호
+        RE_REF_BBS_ID         As "replyRefBoardId",   -- 답변글 참조ID
+        RE_DEPS              As "replyDepth",        -- 답변글 깊이
+        RE_ORD                As "replyOrder",        -- 답변글 순차번호
+        USE_YN                As "status",            -- 상태(Y:사용, N:미사용)
+        REG_ID                As "regId",             -- 등록자ID
+        (SELECT  USER_NAME
+         FROM    WS_USER_C
+         WHERE   USER_ID = WS_BOARD_Z.REG_ID
+        )                       As "regName",           -- 등록자명
+        REG_DATE                As "regDate",           -- 등록일자
+        REG_TIME                As "regTime",           -- 등록시간
+        MOD_ID                  As "modId",             -- 수정자ID
+        MOD_DATE                As "modDate",           -- 수정일자
+        MOD_TIME                As "modTime"            -- 수정시간
+FROM
+        WS_BOARD_Z
+WHERE   1 = 1
+AND     BBS_ID = $input.boardId

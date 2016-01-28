@@ -1,0 +1,4 @@
+## 다운로드 카운트 업데이트
+UPDATE WS_FILE_ATTACH_Z
+SET  DOWN_CNT = DOWN_CNT + 1
+WHERE FILE_ATCH_ID = $input.fileAttachId 

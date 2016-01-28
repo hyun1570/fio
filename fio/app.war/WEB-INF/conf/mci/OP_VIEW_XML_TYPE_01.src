@@ -1,0 +1,84 @@
+<html>
+<body>
+<BASEFONT SIZE=2>
+<font size=2 color=blue>
+&lt;?xml version="1.0" encoding="$CharSet" ?&gt;<br>
+</font>
+<font size=2 color=brown>&lt;EffectDTO&gt;<br></font>
+<font size=2 color=brown>&lt;Summary&gt;<br></font>
+#set ( $Summary = $XmlUtil.convertToXmlChar($Summary) )
+#foreach( $item in $Summary.keySet() )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=2 color=brown>&lt;$item&gt;</font>$Summary.get("$item")<font size=2 color=brown>&lt;/$item&gt;</font><br>
+#end
+<font size=2 color=brown>&lt;/Summary&gt;<br></font>
+<font size=2 color=brown>&lt;System&gt;<br></font>
+#set ( $System = $XmlUtil.convertToXmlChar($System) )
+#foreach( $item in $System.keySet() )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=2 color=brown>&lt;$item&gt;</font>$System.get("$item")<font size=2 color=brown>&lt;/$item&gt;</font><br>
+#end
+<font size=2 color=brown>&lt;/System&gt;<br></font>
+<font size=2 color=brown>&lt;Master&gt;<br></font>
+#set ( $Master = $XmlUtil.convertToXmlChar($Master) )
+#foreach( $item in $Master.keySet() )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=2 color=brown>&lt;$item&gt;</font>$Master.get("$item")<font size=2 color=brown>&lt;/$item&gt;</font><br>
+#end
+<font size=2 color=brown>&lt;/Master&gt;<br></font>
+<font size=2 color=brown>&lt;MtoList&gt;<br></font>
+#foreach( $item in $MtoSet.keySet() )
+#set ( $Mto = $MtoSet.getObject("$item") )
+#set ( $Mto = $XmlUtil.convertXmlChar($Mto) )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=2 color=brown>&lt;$item&gt;</font><br>
+#foreach( $col in $Mto.keySet() )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=2 color=brown>&lt;$col&gt;</font>$Mto.get("$col")<font size=2 color=brown>&lt;/$col&gt;<br></font>
+#end
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=2 color=brown>&lt;/$item&gt;</font><br>
+#end
+<font size=2 color=brown>&lt;/MtoList&gt;<br></font>
+<font size=2 color=brown>&lt;AtoList&gt;<br></font>
+#foreach( $item in $AtoSet.keySet() )
+#set ( $Ato = $AtoSet.getObject("$item") )
+#set ( $Ato = $XmlUtil.convertXmlChar($Ato) )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=2 color=brown>&lt;$item&gt;</font><br>
+#foreach( $col in $Ato.getArray() )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=2 color=brown>&lt;value&gt;</font>$col<font size=2 color=brown>&lt;/value&gt;<br></font>
+#end
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=2 color=brown>&lt;/$item&gt;</font><br>
+#end
+<font size=2 color=brown>&lt;/AtoList&gt;<br></font>
+<font size=2 color=brown>&lt;LtoList&gt;<br></font>
+#foreach( $item in $LtoSet.keySet() )
+#set ( $Lto = $LtoSet.getObject("$item") )
+#set ( $Lto = $XmlUtil.convertToXmlChar($Lto) )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=2 color=brown>&lt;$item&gt;</font><br>
+<font size=2 color=brown>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;RowInfo&gt;<br></font>
+#set ( $Info = $Lto.getInfoMap() )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=2 color=brown>&lt;ROW_COUNT&gt;</font>$Lto.size()<font size=2 color=brown>&lt;/ROW_COUNT&gt;<br></font>
+#if ($Info.get("ROW_TOT"))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=2 color=brown>&lt;ROW_TOT&gt;</font>$Info.get("ROW_TOT")<font size=2 color=brown>&lt;/ROW_TOT&gt;<br></font>
+#end
+#if ($Info.get("PG_NUM"))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=2 color=brown>&lt;PG_NUM&gt;</font>$Info.get("PG_NUM")<font size=2 color=brown>&lt;/PG_NUM&gt;<br></font>
+#end
+#if ($Info.get("PG_TOT"))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=2 color=brown>&lt;PG_TOT&gt;</font>$Info.get("PG_TOT")<font size=2 color=brown>&lt;/PG_TOT&gt;<br></font>
+#end
+#if ($Info.get("PG_SIZE"))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=2 color=brown>&lt;PG_SIZE&gt;</font>$Info.get("PG_SIZE")<font size=2 color=brown>&lt;/PG_SIZE&gt;<br></font>
+#end
+<font size=2 color=brown>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/RowInfo&gt;<br></font>
+<font size=2 color=brown>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;RowList&gt;<br></font>
+#foreach( $Mto in $Lto.getList() )
+<font size=2 color=brown>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Row&gt;<br></font>
+#foreach( $col in $Mto.keySet() )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=2 color=brown>&lt;$col&gt;</font>$Mto.get("$col")<font size=2 color=brown>&lt;/$col&gt;<br></font>
+#end
+<font size=2 color=brown>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/Row&gt;<br></font>
+#end
+<font size=2 color=brown>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/RowList&gt;<br></font>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=2 color=brown>&lt;/$item&gt;</font><br>
+#end
+<font size=2 color=brown>&lt;/LtoList&gt;<br></font>
+<font size=2 color=brown>&lt;/EffectDTO&gt;<br></font>
+</font>
+</body>
+</html>

@@ -1,0 +1,79 @@
+#*
+  사용자 프로그램 목록
+*#
+SELECT  programId        As  "programId",
+        max(programPath)  As  "programPath",
+        max(programName) As  "programName",
+        max(programType)  As  "programType",
+        max(menuType)      As  "menuType",
+        max(menuId)          As  "menuId",
+        ''                          As  "userId",
+        ''                          As  "roleName",
+        max(menuName)     As "menuName",
+        max(menuPntId)     As "menuPntId",
+        max(menuOrd)        As "menuOrd"
+FROM 
+( 
+
+##   SELECT
+##           PRG.PGM_ID      As  programId,
+##           PRG.PGM_PATH    As  programPath,
+##           PRG.PGM_NAME    As  programName,
+##           PRG.PGM_TYPE    As  programType,
+##           PRG.MENU_TYPE       As  menuType,
+##           PRG.MENU_ID         As  menuId,
+##           ''                          As  userId,
+##           ''                          As  roleName,
+##           (SELECT PGM_NAME
+##               FROM WS_PROGRAM_C
+##             WHERE MENU_ID = $input.menuId
+##               AND SITE_ID = PRG.SITE_ID
+##            )                            As menuName,
+##           PRG.MENU_PNT_ID    As menuPntId,
+##           PRG.MENU_ORD       As menuOrd
+##   FROM WS_PROGRAM_C PRG, WS_SITE_C ST
+##   WHERE ST.SITE_ID         = PRG.SITE_ID
+##        AND ST.SITE_CODE   = $input.siteCode
+##        AND PRG.MENU_TYPE IN ('10','20')
+##        AND PRG.USE_YN ='Y'
+##   
+##   UNION ALL
+  
+    SELECT
+            PRG.PGM_ID      As  programId,
+            PRG.PGM_PATH    As  programPath,
+            PRG.PGM_NAME    As  programName,
+            PRG.PGM_TYPE    As  programType,
+            PRG.MENU_TYPE       As  menuType,
+            PRG.MENU_ID         As  menuId,
+            US.USER_ID          As  userId,
+            RO.ROLE_NAME        As  roleName,
+            (SELECT PGM_NAME
+                FROM WS_PROGRAM_C
+              WHERE MENU_ID = $input.menuId
+                AND SITE_ID = PRG.SITE_ID
+             )                            As menuName,
+            PRG.MENU_PNT_ID    As menuPntId,
+            PRG.MENU_ORD       As menuOrd
+    FROM
+            WS_USER_C US, 
+            WS_USER_ROLE_C UR,
+            WS_ROLE_C RO,
+            WS_USER_ROLE_PROGRAM_C URP,
+            WS_SITE_C ST,
+            WS_PROGRAM_C PRG
+    WHERE  URP.USER_ID     = US.USER_ID
+        AND   URP.PGM_ID      = PRG.PGM_ID 
+        AND   UR.USER_ROLE_ID = URP.USER_ROLE_ID
+        AND   RO.ROLE_ID       = UR.ROLE_ID
+        AND   US.USER_ID       = $input.userId
+        AND   US.USE_YN        = 'Y'
+        AND   ST.SITE_ID         = PRG.SITE_ID
+        AND   ST.SITE_CODE   = $input.siteCode
+        AND   PRG.USE_YN ='Y'
+        AND   URP.USE_YN = 'Y'
+)
+CONNECT BY PRIOR menuPntId = programId AND LEVEL=1
+GROUP BY programId
+ORDER BY max(menuord)
+

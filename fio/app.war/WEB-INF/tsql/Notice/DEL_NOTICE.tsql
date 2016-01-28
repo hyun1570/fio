@@ -1,0 +1,10 @@
+## 공지사항 삭제
+
+##DELETE
+##FROM    WS_BOARD_Z
+##WHERE   1 = 1
+##AND     BOARD_ID = $input.boardId
+
+UPDATE WS_BOARD_Z
+   SET USE_YN = 'N'
+ WHERE BBS_ID = $input.boardId

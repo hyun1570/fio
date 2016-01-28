@@ -1,0 +1,8 @@
+## Q & A 조회수 수정
+
+UPDATE
+        WS_BOARD_Z
+SET     
+        HIT_CNT = HIT_CNT + 1
+WHERE   1 = 1
+AND     BBS_ID = $input.boardId

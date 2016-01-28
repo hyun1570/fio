@@ -1,0 +1,23 @@
+#*
+  프로그램 수정
+*#
+UPDATE WS_PROGRAM_C
+SET 
+    SITE_ID        = $input.siteId,
+    PGM_PNT_ID     = $input.programParentId,
+    PGM_TYPE       = $input.programType,
+    PGM_NAME       = $input.programName,
+    PGM_DESC       = $input.programDesc,
+    PGM_PATH       = $input.programPath,
+    MENU_ID        = $input.menuId,
+    MENU_PNT_ID    = $input.menuParentId,
+    MENU_TYPE      = $input.menuType,
+    MENU_ORD       = TO_NUMBER($input.menuOrder,'999'),
+    MENU_OPT       = $input.menuOption,
+    USE_YN         = $input.status,
+    MOD_ID         = $input.modId, 
+    MOD_DATE       = TO_CHAR(sysDate, 'YYYYMMDD'), 
+    MOD_TIME       = TO_CHAR(sysDate, 'HH24MISS')
+WHERE PGM_ID = $input.programId  
+  AND USE_YN     = 'Y'
+

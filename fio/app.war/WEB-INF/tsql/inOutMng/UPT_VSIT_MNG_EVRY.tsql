@@ -1,0 +1,97 @@
+UPDATE TA_VSIT_MNG_EVRY_Z SET
+       IN_GATE_1    = $input.inGate1,
+       OUT_GATE_1   = $input.outGate1,
+       IN_GATE_2    = $input.inGate2,
+       OUT_GATE_2   = $input.outGate2,
+       IN_GATE_3    = $input.inGate3,
+       OUT_GATE_3   = $input.outGate3,
+       IN_GATE_4    = $input.inGate4,
+       OUT_GATE_4   = $input.outGate4,
+       IN_GATE_5    = $input.inGate5,
+       OUT_GATE_5   = $input.outGate5,
+       
+#if($input.fetch("procType") == "P")
+    
+    #if($input.fetch("ioCnt") == "1")
+        #if($input.fetch("ioStat") == "O")
+            IN_TIME_1    = $input.inTime1,
+            OUT_TIME_1   = TO_CHAR(SYSDATE, 'HH24MISS'),
+        #end
+    #else
+        IN_TIME_1    = $input.inTime1,
+        OUT_TIME_1   = $input.outTime1,
+    #end
+    
+    #if($input.fetch("ioCnt") == "2")
+        #if($input.fetch("ioStat") == "I")
+            IN_TIME_2    = TO_CHAR(SYSDATE, 'HH24MISS'),
+            OUT_TIME_2   = '',
+        #elseif($input.fetch("ioStat") == "O")
+            IN_TIME_2    = $input.inTime2,
+            OUT_TIME_2   = TO_CHAR(SYSDATE, 'HH24MISS'),
+        #end
+    #else
+        IN_TIME_2    = $input.inTime2,
+        OUT_TIME_2   = $input.outTime2,
+    #end
+    
+    #if($input.fetch("ioCnt") == "3")
+        #if($input.fetch("ioStat") == "I")
+            IN_TIME_3    = TO_CHAR(SYSDATE, 'HH24MISS'),
+            OUT_TIME_3   = '',
+        #elseif($input.fetch("ioStat") == "O")
+            IN_TIME_3    = $input.inTime3,
+            OUT_TIME_3   = TO_CHAR(SYSDATE, 'HH24MISS'),
+        #end
+    #else
+        IN_TIME_3    = $input.inTime3,
+        OUT_TIME_3   = $input.outTime3,
+    #end        
+    
+    
+    #if($input.fetch("ioCnt") == "4")
+        #if($input.fetch("ioStat") == "I")
+            IN_TIME_4    = TO_CHAR(SYSDATE, 'HH24MISS'),
+            OUT_TIME_4   = '',
+        #elseif($input.fetch("ioStat") == "O")
+            IN_TIME_4    = $input.inTime4,
+            OUT_TIME_4   = TO_CHAR(SYSDATE, 'HH24MISS'),
+        #end
+    #else
+        IN_TIME_4    = $input.inTime4,
+        OUT_TIME_4   = $input.outTime4,        
+    #end
+    
+    #if($input.fetch("ioCnt") == "5")
+        #if($input.fetch("ioStat") == "I")
+            IN_TIME_5    = TO_CHAR(SYSDATE, 'HH24MISS'),
+            OUT_TIME_5   = '',
+        #elseif($input.fetch("ioStat") == "E")
+            IN_TIME_5    = $input.inTime5,
+            OUT_TIME_5   = TO_CHAR(SYSDATE, 'HH24MISS'),
+        #end
+    #else
+        IN_TIME_5    = $input.inTime5,
+        OUT_TIME_5   = $input.outTime5,        
+    #end
+    
+#elseif($input.fetch("procType") == "C") 
+        IN_TIME_1   = $input.inTime1,
+        IN_TIME_2   = $input.inTime2,
+        IN_TIME_3   = $input.inTime3,
+        IN_TIME_4   = $input.inTime4,
+        IN_TIME_5   = $input.inTime5,
+        OUT_TIME_1  = $input.outTime1,
+        OUT_TIME_2  = $input.outTime2,
+        OUT_TIME_3  = $input.outTime3,
+        OUT_TIME_4  = $input.outTime4,
+        OUT_TIME_5  = $input.outTime5,        
+#end       
+       
+
+       ETC          = $input.etc,
+       IO_STAT      = $input.ioStat,
+       IO_CNT       = $input.ioCnt,
+       MOD_DATE     = TO_CHAR(SYSDATE, 'YYYYMMDD'),
+       MOD_TIME     = TO_CHAR(SYSDATE, 'HH24MISS')
+WHERE VSIT_MNG_E_ID = $input.vsitMngEId

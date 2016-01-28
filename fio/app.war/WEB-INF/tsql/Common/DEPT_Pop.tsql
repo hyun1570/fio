@@ -1,0 +1,31 @@
+SELECT
+        U.BUSS_CODE As "bussCode",
+        U.NODE_CODE As "nodeCode",
+        U.DEPT_CODE As "deptCode", 
+        D.DEPT_NAME As "deptName"
+FROM
+        (
+                SELECT BUSS_CODE, NODE_CODE, DEPT_CODE 
+                FROM COMM_EMP_INFO@COMM_DB      -- DB_LINK로 대체될 인사 테이블
+                WHERE 1 = 1
+#if ($input.fetch("sBpCode") == "CC")
+                and NODE_CODE = 'CC'
+#else
+                and NODE_CODE = 'AA'
+                and LOC_CODE  in ('D1', 'F2', 'AB')
+#end
+                AND TENURE_KIND = '1' -- 재직인 사원의 부서
+                AND USE_YN = 'Y'
+                GROUP BY BUSS_CODE, NODE_CODE, DEPT_CODE
+        ) U,
+        COMM_DEPT_INFO@COMM_DB D -- DB_LINK로 대체될 부서 테이블
+WHERE   U.DEPT_CODE = D.DEPT_CODE
+AND     D.USE_YN = 'Y'
+AND     TO_NUMBER(NVL(ORG_LEVEL, 0)) > 3
+#if ($input.fetch("sType") == "sDeptName")
+    #if($input.isEmpty("sTypeNm"))
+    #else
+      AND UPPER(DEPT_NAME) LIKE '%' || UPPER($input.sTypeNm) || '%'
+    #end
+#end
+ORDER BY U.DEPT_CODE

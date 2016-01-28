@@ -1,0 +1,17 @@
+UPDATE TA_EVRY_DAY_VSIT SET
+    BP_CODE         = $input.bpCode,               
+	DEPT_CODE       = $input.deptCode,             
+	INTV_USER_ID    = $input.intvUserId,           
+	INTV_USER_TEL   = $input.intvUserTel,          
+	INTV_USER_MAIL  = $input.intvUserMail,         
+	VSIT_COMP_NM    = $input.vsitCompNm,           
+	VSIT_CODE       = $input.vsitCode,             
+	VSIT_USER_NM    = $input.vsitUserNm,           
+	VSIT_USER_TEL   = $input.vsitUserTel,          
+	VSIT_USER_MAIL  = $input.vsitUserMail,         
+	ETC             = $input.etc,                  
+	IN_OUT_STOP     = $input.inOutStop,                         
+	MOD_ID          = $input.modId,                
+	MOD_DATE        = TO_CHAR(SYSDATE, 'yyyyMMdd'),
+	MOD_TIME        = TO_CHAR(SYSDATE, 'HH24MISS') 
+WHERE EVRY_DAY_VSIT_ID = $input.evryDayVsitId

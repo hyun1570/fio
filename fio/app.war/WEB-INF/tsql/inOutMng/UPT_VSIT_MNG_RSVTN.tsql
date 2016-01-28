@@ -1,0 +1,10 @@
+UPDATE TA_VSIT_MNG_RSVTN_Z SET
+	OUT_GATE   = $input.outGate,
+#if($input.fetch("ioStat") == "I")
+    OUT_TIME   = '',
+#elseif($input.fetch("ioStat") == "O")	
+	OUT_TIME   = TO_CHAR(SYSDATE, 'HH24MISS'),
+#end	
+	ETC        = $input.etc,
+	IO_STAT    = $input.ioStat
+WHERE VSIT_MNG_R_ID = $input.vsitMngRId

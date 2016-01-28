@@ -1,0 +1,68 @@
+ select
+        SNO             As "sno",
+        KNAME           As "kname",
+        ENAME           As "ename",
+        BUSS_CODE       As "bussCode",
+        NODE_CODE       As "nodeCode",
+        DEPT_CODE       As "deptCode",
+        (
+         select DEPT_NAME 
+           from COMM_DEPT_INFO@COMM_DB  -- 임시 부서 테이블
+          where DEPT_CODE   = U.DEPT_CODE
+        )               As "deptName",
+        DUTY_RANK       As "dutyRank",
+        (       
+         select CODE_NAME
+           from WS_COMMON_D
+          where MAS_CODE= 'H001'
+            and CODE    = U.DUTY_RANK
+        )               As "dutyRankName",
+        DUTY_LEVEL      As "dutyLevel",
+        DUTY_GRD_CD     As "dutyGrdCd",
+        DUTY_STEP       As "dutyStep",
+        HOBONG          As "hobong",
+        NVL(EMAIL, ( SELECT W.EMAL FROM WS_USER_C W WHERE W.USER_ID = SNO)  )             As "email",
+        PER_ZIP         As "perZip",
+        PER_ADDR        As "perAddr",
+        PER_ADDR2       As "perAddr2",
+        OFFICE_TEL      As "officeTel",
+        HOME_TEL        As "homeTel",
+        MOBIL_TEL       As "mobilTel",
+        ENTER_DATE      As "enterDate",
+        RETIRE_DATE     As "retireDate",
+        BIRTHDAY        As "birthday",
+        WEDD_DATE       As "weddDate",
+        ECENT_DATE      As "ecentDate",
+        GRPENT_DATE     As "grpentDate",
+        RISE_DATE       As "riseDate",
+        EMP_CLASS       As "empClass",
+        UNION_NM        As "unionNm",
+        (
+         select FACT_CODE
+           from TA_DEPT_MNG_C
+          where DEPT_CODE   = U.DEPT_CODE
+        
+        )               As "factCode",
+        LOC_CODE        As "locCode",
+        TENURE_KIND     As "tenureKind",
+        BANK_NO         As "bankNo",
+        JU_NO           As "juNo"
+   from COMM_EMP_INFO@COMM_DB U -- 임시 사원테이블
+  where 1 = 1
+#if ($input.fetch("sBpCode") == "CC")
+    and NODE_CODE = 'CC'
+#else
+    and NODE_CODE = 'AA'
+    and LOC_CODE  in ('D1', 'F2', 'AB')
+#end
+    and USE_YN = 'Y'
+#if ($input.fetch("sType") == "userName")
+    and upper(KNAME)    = upper($input.sTypeNm)
+#end
+#if ($input.isContain("sFactCode"))
+    and DEPT_CODE in (
+             select DEPT_CODE 
+               from TA_DEPT_MNG_C 
+              where FACT_CODE   = $input.sFactCode
+        )
+#end

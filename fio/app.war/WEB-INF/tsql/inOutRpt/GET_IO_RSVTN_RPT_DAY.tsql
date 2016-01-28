@@ -1,0 +1,98 @@
+## 예약 출입자 일별현황
+
+SELECT 
+        RSVTN.BP_CODE                   As "bpCode",
+        RSVTN.FACT_CODE                 AS "factCode",
+        (SELECT CODE_NAME
+         FROM WS_COMMON_D
+         WHERE MAS_CODE = 'H140'
+         AND CODE = RSVTN.FACT_CODE
+        )                               As "factName",
+        MNG.VSIT_DATE                   As "vsitDate",
+        RSVTN.DEPT_NAME                 As "deptName",
+        RSVTN.INTV_USER_NAME            As "intvUserName",
+        RSVTN.VSIT_RSVTN_NO             As "vsitRsvtnNo",        
+        RSVTN.VSIT_COMP_NAME            As "vsitCompName",        
+        RSVTN.VSIT_USER_NM              As "vsitUserNm",
+        RSVTN.VNUM                      As "vnum",    
+        MNG.IN_GATE                     As "inGate",
+        (SELECT USER_NAME
+         FROM WS_USER_C 
+         WHERE USER_ID = MNG.IN_GATE
+        )                               As "inGateNm",
+        MNG.IN_TIME                     As "inTime",
+        MNG.OUT_GATE                    As "outGate",
+        (SELECT USER_NAME
+         FROM WS_USER_C 
+         WHERE USER_ID = MNG.OUT_GATE
+        )                               As "outGateNm",
+        MNG.OUT_TIME                    As "outTime",
+        RSVTN.VSIT_CODE_NAME            As "vsitCodeName",                
+        MNG.VSIT_MNG_R_ID               As "vsitMngRId",
+        RSVTN.VSIT_RSVTN_M_ID           As "vsitRsvtnMId",
+        RSVTN.VSIT_RSVTN_D_ID           As "vsitRsvtnDId",
+        RSVTN.DEPT_CODE                 As "deptCode",
+        MNG.STRG_NO                     As "strgNo",
+        RSVTN.VSIT_USER_TEL             As "vsitUserTel",
+        RSVTN.VSIT_CODE                 As "vsitCode",
+        RSVTN.INTV_USER_ID              As "intvUserId",
+        RSVTN.INTV_USER_TEL             As "intvUserTel",
+        MNG.ETC                         As "etc", 
+        MNG.IO_STAT                     As "ioStat"
+FROM    TA_VSIT_MNG_RSVTN_Z MNG,
+        (
+            SELECT 
+                    M.VSIT_RSVTN_M_ID      As "VSIT_RSVTN_M_ID",
+                    D.VSIT_RSVTN_D_ID      As "VSIT_RSVTN_D_ID",
+                    M.VSIT_RSVTN_NO        As "VSIT_RSVTN_NO",
+                    M.BP_CODE              As "BP_CODE",
+                    M.DEPT_CODE            As "DEPT_CODE",
+                    M.FACT_CODE            As "FACT_CODE",
+                    (SELECT DEPT_NAME                 
+                      FROM COMM_DEPT_INFO@COMM_DB
+                      WHERE DEPT_CODE = M.DEPT_CODE
+                    )                      As "DEPT_NAME",
+                    M.INTV_USER_ID         As "INTV_USER_ID",
+                    (SELECT KNAME
+                     FROM COMM_EMP_INFO@COMM_DB
+                     WHERE SNO = M.INTV_USER_ID
+                    )                      As "INTV_USER_NAME",
+                    M.INTV_USER_TEL        As "INTV_USER_TEL",
+                    M.INTV_USER_MAIL       As "INTV_USER_MAIL",
+                    M.VSIT_CODE            As "VSIT_CODE",
+                    (SELECT CODE_NAME
+                     FROM WS_COMMON_D
+                     WHERE MAS_CODE = 'EPUPS'
+                     AND CODE = M.VSIT_CODE
+                    )                      As "VSIT_CODE_NAME",
+                    M.VSIT_RSVTN_FROM_DATE As "VSIT_RSVTN_FROM_DATE",
+                    M.VSIT_RSVTN_TO_DATE   As "VSIT_RSVTN_TO_DATE",
+                    M.VSIT_RSVTN_ST_TIME   As "VSIT_RSVTN_ST_TIME",
+                    M.VSIT_RSVTN_ED_TIME   As "VSIT_RSVTN_ED_TIME",
+                    M.VSIT_PROD_YN         As "VSIT_PROD_YN",
+                    M.VSIT_GRUP_YN         As "VSIT_GRUP_YN",
+                    D.VNUM                 As "VNUM",
+                    D.VSIT_COMP_NAME       As "VSIT_COMP_NAME",
+                    D.VSIT_USER_NM         As "VSIT_USER_NM",
+                    D.VSIT_USER_TEL        As "VSIT_USER_TEL",
+                    D.VSIT_USER_MAIL       As "VSIT_USER_MAIL"
+            FROM    TA_VSIT_RSVTN_M M, TA_VSIT_RSVTN_D D
+            WHERE   M.VSIT_RSVTN_M_ID = D.VSIT_RSVTN_M_ID(+)
+            AND     M.APPR_STATUS = 'A'
+            AND     M.BP_CODE = $input.sBpCode
+
+        ) RSVTN
+WHERE   MNG.VSIT_RSVTN_M_ID = RSVTN.VSIT_RSVTN_M_ID
+AND     MNG.VSIT_RSVTN_D_ID = RSVTN.VSIT_RSVTN_D_ID
+#if ($input.fetch("sFromDate") != "" && $input.fetch("sToDate") != "")
+    AND TO_NUMBER(MNG.VSIT_DATE) BETWEEN TO_NUMBER($input.sFromDate) AND TO_NUMBER($input.sToDate) 
+#end
+#if ($input.isContain("factCode"))
+    AND FACT_CODE = $input.factCode
+#elseif ($input.isContain("vsitCode"))
+    AND VSIT_CODE = $input.vsitCode
+#elseif ($input.isContain("inGate"))
+    AND IN_GATE = $input.inGate
+#end
+
+ORDER BY MNG.VSIT_DATE, VSIT_RSVTN_NO

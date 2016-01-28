@@ -1,0 +1,19 @@
+<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE" />
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/base64.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/json2.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-latest.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-ui-1.9.2.custom.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/common.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/commonPopUp.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/browserCheck.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/realgridlic.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/realgridplus.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/swfobject.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/commonCombo.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/dhtmlxWindows/codebase/dhtmlxwindows.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/dhtmlxCalendar/codebase/dhtmlxcalendar.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/dhtmlxForm/codebase/dhtmlxform.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/realgrid_tablestyle.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery.maskedinput.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery.forceNumber.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery.forceAlphabet.js"></script>

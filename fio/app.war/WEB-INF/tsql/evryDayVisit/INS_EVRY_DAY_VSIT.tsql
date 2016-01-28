@@ -1,0 +1,52 @@
+INSERT INTO TA_EVRY_DAY_VSIT
+(
+	EVRY_DAY_VSIT_ID,
+	VSIT_REG_NO,
+	BP_CODE,
+	DEPT_CODE,
+	INTV_USER_ID,
+	INTV_USER_TEL,
+	INTV_USER_MAIL,
+	VSIT_COMP_NM,
+	VSIT_CODE,
+	VSIT_USER_NM,
+	VSIT_USER_TEL,
+	VSIT_USER_MAIL,
+	ETC,
+	IN_OUT_STOP,
+	REG_ID,
+	REG_DATE,
+	REG_TIME,
+	MOD_ID,
+	MOD_DATE,
+	MOD_TIME
+)
+VALUES
+(
+	TA_EVRY_DAY_VSIT_SEQ.NEXTVAL,
+	(  
+	  SELECT 
+	  'F'||TO_CHAR(SYSDATE,'YYYYMMDD')||
+	  LPAD(TO_NUMBER(NVL(SUBSTR(MAX(VSIT_REG_NO), 9), 0))+1, 4, 0)
+	  FROM TA_EVRY_DAY_VSIT
+	  WHERE SUBSTR(VSIT_REG_NO, 2, 8) = TO_CHAR(SYSDATE, 'YYYYMMDD')
+	),
+    $input.bpCode,
+    $input.deptCode,
+    $input.intvUserId,
+    $input.intvUserTel,
+    $input.intvUserMail,
+    $input.vsitCompNm,
+    $input.vsitCode,
+    $input.vsitUserNm,
+    $input.vsitUserTel,
+    $input.vsitUserMail,
+    $input.etc,
+    $input.inOutStop,
+    $input.regId,
+	TO_CHAR(SYSDATE, 'yyyyMMdd'),
+	TO_CHAR(SYSDATE, 'HH24MISS'),
+    $input.modId,
+	TO_CHAR(SYSDATE, 'yyyyMMdd'),
+	TO_CHAR(SYSDATE, 'HH24MISS')
+)

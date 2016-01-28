@@ -1,0 +1,24 @@
+INSERT INTO TA_VSIT_RSVTN_D
+(
+    VSIT_RSVTN_D_ID,
+    VSIT_RSVTN_M_ID,
+    VNUM,
+    VSIT_COMP_NAME,
+    VSIT_USER_NM,
+    VSIT_USER_TEL,
+    VSIT_USER_MAIL,
+    REG_DATE,
+    REG_TIME
+)
+VALUES
+(
+    (TA_VSIT_RSVTN_D_SEQ.NEXTVAL),
+    (SELECT MAX(VSIT_RSVTN_M_ID) FROM TA_VSIT_RSVTN_M WHERE VSIT_RSVTN_NO = $input.vsitRsvtnNo),
+    $input.vnum,
+    $input.vsitCompName,
+    $input.vsitUserNm,
+    $input.vsitUserTel,
+    $input.vsitUserMail,
+    TO_CHAR(SYSDATE, 'YYYYMMDD'),
+    TO_CHAR(SYSDATE, 'HH24MISS')
+)

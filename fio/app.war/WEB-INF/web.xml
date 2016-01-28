@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="EUC-KR"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp" xmlns:web="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="WebApp_ID" version="2.4">
+  <listener>
+    <listener-class>com.cni.fw.web.was.ServiceStarter</listener-class>
+  </listener>
+  <listener>
+    <listener-class>com.cni.fw.web.was.SessionWatcher</listener-class>
+  </listener>
+  <servlet>
+    <description>gateway</description>
+    <display-name>gateway</display-name>
+    <servlet-name>gateway</servlet-name>
+    <servlet-class>com.cni.fw.web.was.ServiceGate</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>gateway</servlet-name>
+    <url-pattern>*.cmd</url-pattern>
+  </servlet-mapping>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <jsp-config>
+    <taglib>
+      <taglib-uri>SideMenu</taglib-uri>
+      <taglib-location>./tld/menu.tld</taglib-location>
+    </taglib>
+  </jsp-config>
+  <distributable/>
+</web-app>
